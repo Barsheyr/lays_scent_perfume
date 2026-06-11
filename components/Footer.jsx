@@ -136,7 +136,7 @@ const Footer = () => {
         { text: "For Him", path: "/gender/male" },
         { text: "Unisex", path: "/gender/unisex" },
         { text: "New Arrivals", path: "/shop" },
-        { text: "All Fragrances", path: "/shop" },
+        { text: "Store", path: "/create-store" },
       ],
     },
     {

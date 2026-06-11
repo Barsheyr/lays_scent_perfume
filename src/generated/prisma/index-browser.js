@@ -136,6 +136,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   price: 'price',
   images: 'images',
   category: 'category',
+  gender: 'gender',
   inStock: 'inStock',
   storeId: 'storeId',
   createdAt: 'createdAt',
@@ -235,6 +236,17 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.Gender = exports.$Enums.Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  UNISEX: 'UNISEX'
+};
+
 exports.OrderStatus = exports.$Enums.OrderStatus = {
   ORDER_PLACED: 'ORDER_PLACED',
   PROCESSING: 'PROCESSING',

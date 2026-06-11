@@ -10,7 +10,7 @@ datasource db {
 model User {
     id    String @id
     name  String
-    email String
+    email String?
     image String
     cart  Json   @default("{}")
 
@@ -30,6 +30,7 @@ model Product {
     price       Float
     images      String[]
     category    String
+    gender      Gender?
     inStock     Boolean  @default(true)
     storeId     String
     createdAt   DateTime @default(now())
@@ -51,6 +52,13 @@ enum OrderStatus {
 enum PaymentMethod {
     COD
     STRIPE
+}
+
+
+enum Gender {
+  MALE
+  FEMALE
+  UNISEX
 }
 
 // Required for creating an Order: total, userId, storeId, addressId, isPaid, paymentMethod, isCouponUsed, coupon (JSON), orderItems (nested)

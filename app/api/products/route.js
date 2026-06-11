@@ -1,0 +1,31 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/src/db";
+
+export async function GET(request) {
+  try {
+    let products = await prisma.product.findMany({
+      where: { inStock: true },
+      include: {
+        rating: {
+          select: {
+            createdAt: true,
+            rating: true,
+            review: true,
+          },
+        },
+        store: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    // remove products with store isActive false
+    products = products.filter((product) => product.store.isActive);
+    return NextResponse.json({ products });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "An internal server error occurred." },
+      { status: 500 }
+    );
+  }
+}

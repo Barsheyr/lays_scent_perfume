@@ -75,6 +75,15 @@ export const PaymentMethod: {
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
+
+export const Gender: {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  UNISEX: 'UNISEX'
+};
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
 }
 
 export type OrderStatus = $Enums.OrderStatus
@@ -84,6 +93,10 @@ export const OrderStatus: typeof $Enums.OrderStatus
 export type PaymentMethod = $Enums.PaymentMethod
 
 export const PaymentMethod: typeof $Enums.PaymentMethod
+
+export type Gender = $Enums.Gender
+
+export const Gender: typeof $Enums.Gender
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1856,7 +1869,7 @@ export namespace Prisma {
   export type UserGroupByOutputType = {
     id: string
     name: string
-    email: string
+    email: string | null
     image: string
     cart: JsonValue
     _count: UserCountAggregateOutputType | null
@@ -1937,7 +1950,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      email: string
+      email: string | null
       image: string
       cart: Prisma.JsonValue
     }, ExtArgs["result"]["user"]>
@@ -2903,6 +2916,7 @@ export namespace Prisma {
     mrp: number | null
     price: number | null
     category: string | null
+    gender: $Enums.Gender | null
     inStock: boolean | null
     storeId: string | null
     createdAt: Date | null
@@ -2916,6 +2930,7 @@ export namespace Prisma {
     mrp: number | null
     price: number | null
     category: string | null
+    gender: $Enums.Gender | null
     inStock: boolean | null
     storeId: string | null
     createdAt: Date | null
@@ -2930,6 +2945,7 @@ export namespace Prisma {
     price: number
     images: number
     category: number
+    gender: number
     inStock: number
     storeId: number
     createdAt: number
@@ -2955,6 +2971,7 @@ export namespace Prisma {
     mrp?: true
     price?: true
     category?: true
+    gender?: true
     inStock?: true
     storeId?: true
     createdAt?: true
@@ -2968,6 +2985,7 @@ export namespace Prisma {
     mrp?: true
     price?: true
     category?: true
+    gender?: true
     inStock?: true
     storeId?: true
     createdAt?: true
@@ -2982,6 +3000,7 @@ export namespace Prisma {
     price?: true
     images?: true
     category?: true
+    gender?: true
     inStock?: true
     storeId?: true
     createdAt?: true
@@ -3083,6 +3102,7 @@ export namespace Prisma {
     price: number
     images: string[]
     category: string
+    gender: $Enums.Gender | null
     inStock: boolean
     storeId: string
     createdAt: Date
@@ -3116,6 +3136,7 @@ export namespace Prisma {
     price?: boolean
     images?: boolean
     category?: boolean
+    gender?: boolean
     inStock?: boolean
     storeId?: boolean
     createdAt?: boolean
@@ -3134,6 +3155,7 @@ export namespace Prisma {
     price?: boolean
     images?: boolean
     category?: boolean
+    gender?: boolean
     inStock?: boolean
     storeId?: boolean
     createdAt?: boolean
@@ -3149,6 +3171,7 @@ export namespace Prisma {
     price?: boolean
     images?: boolean
     category?: boolean
+    gender?: boolean
     inStock?: boolean
     storeId?: boolean
     createdAt?: boolean
@@ -3164,13 +3187,14 @@ export namespace Prisma {
     price?: boolean
     images?: boolean
     category?: boolean
+    gender?: boolean
     inStock?: boolean
     storeId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "mrp" | "price" | "images" | "category" | "inStock" | "storeId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "mrp" | "price" | "images" | "category" | "gender" | "inStock" | "storeId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     store?: boolean | StoreDefaultArgs<ExtArgs>
     orderItems?: boolean | Product$orderItemsArgs<ExtArgs>
@@ -3199,6 +3223,7 @@ export namespace Prisma {
       price: number
       images: string[]
       category: string
+      gender: $Enums.Gender | null
       inStock: boolean
       storeId: string
       createdAt: Date
@@ -3636,6 +3661,7 @@ export namespace Prisma {
     readonly price: FieldRef<"Product", 'Float'>
     readonly images: FieldRef<"Product", 'String[]'>
     readonly category: FieldRef<"Product", 'String'>
+    readonly gender: FieldRef<"Product", 'Gender'>
     readonly inStock: FieldRef<"Product", 'Boolean'>
     readonly storeId: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
@@ -11079,6 +11105,7 @@ export namespace Prisma {
     price: 'price',
     images: 'images',
     category: 'category',
+    gender: 'gender',
     inStock: 'inStock',
     storeId: 'storeId',
     createdAt: 'createdAt',
@@ -11212,6 +11239,14 @@ export namespace Prisma {
   export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
   /**
    * Field references
    */
@@ -11256,6 +11291,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Gender'
+   */
+  export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
+    
+
+
+  /**
+   * Reference to a field of type 'Gender[]'
+   */
+  export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
     
 
 
@@ -11331,7 +11380,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
+    email?: StringNullableFilter<"User"> | string | null
     image?: StringFilter<"User"> | string
     cart?: JsonFilter<"User">
     ratings?: RatingListRelationFilter
@@ -11343,7 +11392,7 @@ export namespace Prisma {
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    email?: SortOrder
+    email?: SortOrderInput | SortOrder
     image?: SortOrder
     cart?: SortOrder
     ratings?: RatingOrderByRelationAggregateInput
@@ -11358,7 +11407,7 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
+    email?: StringNullableFilter<"User"> | string | null
     image?: StringFilter<"User"> | string
     cart?: JsonFilter<"User">
     ratings?: RatingListRelationFilter
@@ -11370,7 +11419,7 @@ export namespace Prisma {
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    email?: SortOrder
+    email?: SortOrderInput | SortOrder
     image?: SortOrder
     cart?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -11384,7 +11433,7 @@ export namespace Prisma {
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
-    email?: StringWithAggregatesFilter<"User"> | string
+    email?: StringNullableWithAggregatesFilter<"User"> | string | null
     image?: StringWithAggregatesFilter<"User"> | string
     cart?: JsonWithAggregatesFilter<"User">
   }
@@ -11400,6 +11449,7 @@ export namespace Prisma {
     price?: FloatFilter<"Product"> | number
     images?: StringNullableListFilter<"Product">
     category?: StringFilter<"Product"> | string
+    gender?: EnumGenderNullableFilter<"Product"> | $Enums.Gender | null
     inStock?: BoolFilter<"Product"> | boolean
     storeId?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
@@ -11417,6 +11467,7 @@ export namespace Prisma {
     price?: SortOrder
     images?: SortOrder
     category?: SortOrder
+    gender?: SortOrderInput | SortOrder
     inStock?: SortOrder
     storeId?: SortOrder
     createdAt?: SortOrder
@@ -11437,6 +11488,7 @@ export namespace Prisma {
     price?: FloatFilter<"Product"> | number
     images?: StringNullableListFilter<"Product">
     category?: StringFilter<"Product"> | string
+    gender?: EnumGenderNullableFilter<"Product"> | $Enums.Gender | null
     inStock?: BoolFilter<"Product"> | boolean
     storeId?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
@@ -11454,6 +11506,7 @@ export namespace Prisma {
     price?: SortOrder
     images?: SortOrder
     category?: SortOrder
+    gender?: SortOrderInput | SortOrder
     inStock?: SortOrder
     storeId?: SortOrder
     createdAt?: SortOrder
@@ -11476,6 +11529,7 @@ export namespace Prisma {
     price?: FloatWithAggregatesFilter<"Product"> | number
     images?: StringNullableListFilter<"Product">
     category?: StringWithAggregatesFilter<"Product"> | string
+    gender?: EnumGenderNullableWithAggregatesFilter<"Product"> | $Enums.Gender | null
     inStock?: BoolWithAggregatesFilter<"Product"> | boolean
     storeId?: StringWithAggregatesFilter<"Product"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
@@ -11976,7 +12030,7 @@ export namespace Prisma {
   export type UserCreateInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingCreateNestedManyWithoutUserInput
@@ -11988,7 +12042,7 @@ export namespace Prisma {
   export type UserUncheckedCreateInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUncheckedCreateNestedManyWithoutUserInput
@@ -12000,7 +12054,7 @@ export namespace Prisma {
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUpdateManyWithoutUserNestedInput
@@ -12012,7 +12066,7 @@ export namespace Prisma {
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUncheckedUpdateManyWithoutUserNestedInput
@@ -12024,7 +12078,7 @@ export namespace Prisma {
   export type UserCreateManyInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
   }
@@ -12032,7 +12086,7 @@ export namespace Prisma {
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
   }
@@ -12040,7 +12094,7 @@ export namespace Prisma {
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
   }
@@ -12053,6 +12107,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12069,6 +12124,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     storeId: string
     createdAt?: Date | string
@@ -12085,6 +12141,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12101,6 +12158,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     storeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12117,6 +12175,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     storeId: string
     createdAt?: Date | string
@@ -12131,6 +12190,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12144,6 +12204,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     storeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12689,6 +12750,21 @@ export namespace Prisma {
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
   }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -12734,6 +12810,11 @@ export namespace Prisma {
     every?: OrderWhereInput
     some?: OrderWhereInput
     none?: OrderWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type RatingOrderByRelationAggregateInput = {
@@ -12787,6 +12868,24 @@ export namespace Prisma {
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
   }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
@@ -12833,6 +12932,13 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type EnumGenderNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableFilter<$PrismaModel> | $Enums.Gender | null
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -12872,6 +12978,7 @@ export namespace Prisma {
     price?: SortOrder
     images?: SortOrder
     category?: SortOrder
+    gender?: SortOrder
     inStock?: SortOrder
     storeId?: SortOrder
     createdAt?: SortOrder
@@ -12890,6 +12997,7 @@ export namespace Prisma {
     mrp?: SortOrder
     price?: SortOrder
     category?: SortOrder
+    gender?: SortOrder
     inStock?: SortOrder
     storeId?: SortOrder
     createdAt?: SortOrder
@@ -12903,6 +13011,7 @@ export namespace Prisma {
     mrp?: SortOrder
     price?: SortOrder
     category?: SortOrder
+    gender?: SortOrder
     inStock?: SortOrder
     storeId?: SortOrder
     createdAt?: SortOrder
@@ -12928,6 +13037,16 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type EnumGenderNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel> | $Enums.Gender | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -13366,6 +13485,10 @@ export namespace Prisma {
     set?: string
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type RatingUpdateManyWithoutUserNestedInput = {
     create?: XOR<RatingCreateWithoutUserInput, RatingUncheckedCreateWithoutUserInput> | RatingCreateWithoutUserInput[] | RatingUncheckedCreateWithoutUserInput[]
     connectOrCreate?: RatingCreateOrConnectWithoutUserInput | RatingCreateOrConnectWithoutUserInput[]
@@ -13519,6 +13642,10 @@ export namespace Prisma {
   export type ProductUpdateimagesInput = {
     set?: string[]
     push?: string | string[]
+  }
+
+  export type NullableEnumGenderFieldUpdateOperationsInput = {
+    set?: $Enums.Gender | null
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -13917,6 +14044,20 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -13943,6 +14084,34 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -13979,6 +14148,13 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumGenderNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableFilter<$PrismaModel> | $Enums.Gender | null
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -14009,6 +14185,16 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel> | $Enums.Gender | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -14575,7 +14761,7 @@ export namespace Prisma {
   export type UserCreateWithoutBuyerOrdersInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingCreateNestedManyWithoutUserInput
@@ -14586,7 +14772,7 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutBuyerOrdersInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUncheckedCreateNestedManyWithoutUserInput
@@ -14701,7 +14887,7 @@ export namespace Prisma {
   export type UserUpdateWithoutBuyerOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUpdateManyWithoutUserNestedInput
@@ -14712,7 +14898,7 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutBuyerOrdersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUncheckedUpdateManyWithoutUserNestedInput
@@ -14847,6 +15033,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14862,6 +15049,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     storeId: string
     createdAt?: Date | string
@@ -14934,6 +15122,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14949,6 +15138,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     storeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14959,7 +15149,7 @@ export namespace Prisma {
   export type UserCreateWithoutRatingsInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     Address?: AddressCreateNestedManyWithoutUserInput
@@ -14970,7 +15160,7 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutRatingsInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     Address?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -14991,6 +15181,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15006,6 +15197,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     storeId: string
     createdAt?: Date | string
@@ -15032,7 +15224,7 @@ export namespace Prisma {
   export type UserUpdateWithoutRatingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     Address?: AddressUpdateManyWithoutUserNestedInput
@@ -15043,7 +15235,7 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutRatingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     Address?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -15070,6 +15262,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15085,6 +15278,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     storeId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15135,7 +15329,7 @@ export namespace Prisma {
   export type UserCreateWithoutAddressInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingCreateNestedManyWithoutUserInput
@@ -15146,7 +15340,7 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutAddressInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUncheckedCreateNestedManyWithoutUserInput
@@ -15189,7 +15383,7 @@ export namespace Prisma {
   export type UserUpdateWithoutAddressInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUpdateManyWithoutUserNestedInput
@@ -15200,7 +15394,7 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutAddressInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUncheckedUpdateManyWithoutUserNestedInput
@@ -15216,6 +15410,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15231,6 +15426,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15291,7 +15487,7 @@ export namespace Prisma {
   export type UserCreateWithoutStoreInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingCreateNestedManyWithoutUserInput
@@ -15302,7 +15498,7 @@ export namespace Prisma {
   export type UserUncheckedCreateWithoutStoreInput = {
     id: string
     name: string
-    email: string
+    email?: string | null
     image: string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUncheckedCreateNestedManyWithoutUserInput
@@ -15342,6 +15538,7 @@ export namespace Prisma {
     price?: FloatFilter<"Product"> | number
     images?: StringNullableListFilter<"Product">
     category?: StringFilter<"Product"> | string
+    gender?: EnumGenderNullableFilter<"Product"> | $Enums.Gender | null
     inStock?: BoolFilter<"Product"> | boolean
     storeId?: StringFilter<"Product"> | string
     createdAt?: DateTimeFilter<"Product"> | Date | string
@@ -15378,7 +15575,7 @@ export namespace Prisma {
   export type UserUpdateWithoutStoreInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUpdateManyWithoutUserNestedInput
@@ -15389,7 +15586,7 @@ export namespace Prisma {
   export type UserUncheckedUpdateWithoutStoreInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     image?: StringFieldUpdateOperationsInput | string
     cart?: JsonNullValueInput | InputJsonValue
     ratings?: RatingUncheckedUpdateManyWithoutUserNestedInput
@@ -15703,6 +15900,7 @@ export namespace Prisma {
     price: number
     images?: ProductCreateimagesInput | string[]
     category: string
+    gender?: $Enums.Gender | null
     inStock?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15730,6 +15928,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15745,6 +15944,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15760,6 +15960,7 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     images?: ProductUpdateimagesInput | string[]
     category?: StringFieldUpdateOperationsInput | string
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
     inStock?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
