@@ -63,6 +63,14 @@ export const categoryImages = {
   // Rolex: Rolex,
 };
 
+export const genderImages = {
+  MALE: "https://images.unsplash.com/photo-1701476578647-277d3aac8922?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  FEMALE:
+    "https://images.unsplash.com/photo-1642999743462-dd9c62e2275c?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  UNISEX:
+    "https://images.unsplash.com/photo-1658507311146-7275ad11d67d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+};
+
 export const dummyRatingsData = [
   {
     id: "rat_1",

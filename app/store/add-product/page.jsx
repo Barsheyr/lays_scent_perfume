@@ -19,6 +19,8 @@ export default function StoreAddProduct() {
     "Armani",
     "Burberry",
     "Calvin Klein",
+    "Armaf",
+    "Maison Alhambra",
     "Other",
   ];
 

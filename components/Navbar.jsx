@@ -70,7 +70,7 @@ const Navbar = () => {
 
             <Link
               href="/cart"
-              className="relative flex items-center gap-2 text-slate-600"
+              className="relative flex items-center gap-2 text-white"
             >
               <ShoppingCart size={18} />
               Cart

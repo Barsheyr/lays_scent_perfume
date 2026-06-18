@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import Newsletter from "@/components/Newsletter";
 import OurSpecs from "@/components/OurSpec";
 import LatestProducts from "@/components/LatestProducts";
+import Gender from "@/components/Gender";
 
 export default function Home() {
   return (
@@ -12,7 +13,8 @@ export default function Home() {
       <LatestProducts />
 
       <div className="bg-[#0e0a0b]">
-        <BestSelling />
+        {/* <BestSelling /> */}
+        <Gender />
         <OurSpecs />
       </div>
     </div>
