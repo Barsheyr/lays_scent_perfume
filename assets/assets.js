@@ -56,6 +56,13 @@ export const categories = [
   "For Him",
 ];
 
+export const categoryImages = {
+  // Tissot: Tissot,
+  // GShock: GShock,
+  // Casio: Casio,
+  // Rolex: Rolex,
+};
+
 export const dummyRatingsData = [
   {
     id: "rat_1",
