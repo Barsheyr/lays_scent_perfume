@@ -17,7 +17,7 @@ const page = () => {
     <div className="max-w-7xl mx-auto px-5 py-10">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-xl font-semibold text-slate-800 capitalize">
-          {gender} Watches
+          {gender} Perfumes
         </h1>
         <Link href="/shop" className="hover:underline">
           Shop
@@ -41,10 +41,8 @@ const page = () => {
                   className="group-hover:scale-105 transition-transform rounded-lg h-50 lg:h-80"
                 />
               </div>
-              <p className="mt-2 text-sm text-slate-700 font-medium">
-                {item.name}
-              </p>
-              <p className="text-slate-500 text-sm">
+              <p className="mt-2 text-sm text-white font-medium">{item.name}</p>
+              <p className="text-white text-sm">
                 ₦{item.price.toLocaleString()}
               </p>
             </Link>
