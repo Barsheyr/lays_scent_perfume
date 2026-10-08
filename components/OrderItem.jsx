@@ -12,14 +12,14 @@ const OrderItem = ({ order }) => {
   const { ratings } = useSelector((state) => state.rating);
 
   // ✅ Build a single WhatsApp message for the whole order
-  const sellerPhone = "+2348101760372";
+  const sellerPhone = "+2347084775311";
 
   const productList = order.orderItems
     .map(
       (item, index) =>
         `${index + 1}. ${item.product.name}\n   - Quantity: ${
           item.quantity
-        }\n   - Price: ${currency}${item.price} each`
+        }\n   - Price: ${currency}${item.price} each`,
     )
     .join("\n");
 
@@ -28,7 +28,7 @@ const OrderItem = ({ order }) => {
   const message = `Hello! I'm interested in purchasing the following items from your store:\n\n${productList}\n\nTotal Amount: ${totalAmount}\n\nDelivery Address:\n${order.address.street}, ${order.address.city}, ${order.address.state}, ${order.address.country}\n\nPlease let me know how I can proceed with the payment.`;
 
   const whatsappUrl = `https://wa.me/${sellerPhone}?text=${encodeURIComponent(
-    message
+    message,
   )}`;
 
   return (
@@ -63,14 +63,14 @@ const OrderItem = ({ order }) => {
                     {ratings.find(
                       (rating) =>
                         order.id === rating.orderId &&
-                        item.product.id === rating.productId
+                        item.product.id === rating.productId,
                     ) ? (
                       <Rating
                         value={
                           ratings.find(
                             (rating) =>
                               order.id === rating.orderId &&
-                              item.product.id === rating.productId
+                              item.product.id === rating.productId,
                           ).rating
                         }
                       />
@@ -124,8 +124,8 @@ const OrderItem = ({ order }) => {
               order.status === "confirmed"
                 ? "text-yellow-500 bg-yellow-100"
                 : order.status === "delivered"
-                ? "text-green-500 bg-green-100"
-                : "text-slate-500 bg-slate-100"
+                  ? "text-green-500 bg-green-100"
+                  : "text-slate-500 bg-slate-100"
             }`}
           >
             <DotIcon size={10} className="scale-250" />
