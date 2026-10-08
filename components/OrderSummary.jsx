@@ -22,7 +22,8 @@ const OrderSummary = ({ totalPrice, items }) => {
     if (user) {
       dispatch(fetchAddress({ getToken }));
     }
-  }, [user, dispatch, getToken]);
+    // }, [user, dispatch, getToken]);
+  }, [user]);
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddressModal, setShowAddressModal] = useState(false);

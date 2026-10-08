@@ -15,7 +15,7 @@ export default function Home() {
       <div className="bg-[#0e0a0b]">
         {/* <BestSelling /> */}
         <Gender />
-        <OurSpecs />
+        {/* <OurSpecs /> */}
       </div>
     </div>
   );

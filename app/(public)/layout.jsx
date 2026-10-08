@@ -27,6 +27,7 @@ export default function PublicLayout({ children }) {
       dispatch(fetchAddress({ getToken }));
       // dispatch(fetchUserRatings({ getToken }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {

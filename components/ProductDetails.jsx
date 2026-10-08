@@ -50,10 +50,10 @@ const ProductDetails = ({ product }) => {
             >
               <Image
                 src={image}
-                className="group-hover:scale-103 group-active:scale-95 transition object-cover"
-                alt=""
-                width={45}
-                height={45}
+                className="group-hover:scale-103 group-active:scale-95 transition object-cover w-full h-full rounded-xl"
+                alt={`${product.name} thumbnail ${index + 1}`}
+                width={104}
+                height={104}
               />
             </div>
           ))}
@@ -63,10 +63,10 @@ const ProductDetails = ({ product }) => {
         <div className="flex justify-center items-center h-100 sm:size-113 border border-white/8 bg-white/3 rounded-2xl">
           <Image
             src={mainImage}
-            alt=""
-            width={250}
-            height={250}
-            className="object-contain"
+            alt={product.name}
+            width={452}
+            height={452}
+            className="object-contain w-full h-full p-6"
           />
         </div>
       </div>
