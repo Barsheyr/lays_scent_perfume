@@ -325,7 +325,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-medium text-white tracking-tight">
-              Layah's{" "}
+              Layah's
               <span className="text-[#c97b63] italic font-serif">Scent</span>
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#c97b63]" />
@@ -355,14 +355,15 @@ const Navbar = () => {
               </Link>
             </div>
 
-            {/* <Link href="/category" className={navLink}>
-              Brand
-            </Link> */}
             <Link href="/about" className={navLink}>
               About
             </Link>
             <Link href="/contact" className={navLink}>
               Contact
+            </Link>
+
+            <Link href="/orders" className={navLink}>
+              Orders
             </Link>
           </div>
 
