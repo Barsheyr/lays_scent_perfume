@@ -24,6 +24,9 @@ export async function POST(request) {
     const category = formData.get("category");
     const gender = formData.get("gender");
     const images = formData.getAll("images");
+    const costPrice = Number(formData.get("costPrice")) || 0;
+    const openingStock = Math.max(0, parseInt(formData.get("openingStock")) || 0);
+    const recordExpense = formData.get("recordExpense") === "true";
 
     if (
       !name ||
@@ -63,7 +66,7 @@ export async function POST(request) {
       })
     );
 
-    await prisma.product.create({
+    const product = await prisma.product.create({
       data: {
         name,
         description,
@@ -73,8 +76,34 @@ export async function POST(request) {
         gender,
         images: imagesUrl,
         storeId,
+        costPrice,
+        stock: openingStock,
+        trackStock: openingStock > 0,
+        inStock: true,
       },
     });
+
+    if (openingStock > 0) {
+      await prisma.stockMovement.create({
+        data: {
+          productId: product.id,
+          type: "RESTOCK",
+          quantity: openingStock,
+          unitCost: costPrice,
+          note: "Opening stock",
+        },
+      });
+      if (recordExpense && costPrice > 0) {
+        await prisma.expense.create({
+          data: {
+            category: "STOCK_PURCHASE",
+            amount: costPrice * openingStock,
+            description: `${openingStock} × ${name} (opening stock)`,
+            productId: product.id,
+          },
+        });
+      }
+    }
 
     return NextResponse.json({ message: "Product added successfully" });
   } catch (error) {

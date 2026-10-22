@@ -316,11 +316,13 @@ const OrderItem = ({ order }) => {
             className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs border ${
               order.status === "DELIVERED"
                 ? "bg-[#c97b63]/10 border-[#c97b63]/30 text-[#c97b63]"
-                : order.status === "SHIPPED"
+                : order.status === "SHIPPED" || order.status === "OUT_FOR_DELIVERY"
                   ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
                   : order.status === "PROCESSING"
                     ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400"
-                    : "bg-white/5 border-white/10 text-white/30"
+                    : order.status === "CANCELLED"
+                      ? "bg-red-500/10 border-red-500/30 text-red-400"
+                      : "bg-white/5 border-white/10 text-white/30"
             }`}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -367,11 +369,13 @@ const OrderItem = ({ order }) => {
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs border ${
                 order.status === "DELIVERED"
                   ? "bg-[#c97b63]/10 border-[#c97b63]/30 text-[#c97b63]"
-                  : order.status === "SHIPPED"
+                  : order.status === "SHIPPED" || order.status === "OUT_FOR_DELIVERY"
                     ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
                     : order.status === "PROCESSING"
                       ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-400"
-                      : "bg-white/5 border-white/10 text-white/30"
+                      : order.status === "CANCELLED"
+                        ? "bg-red-500/10 border-red-500/30 text-red-400"
+                        : "bg-white/5 border-white/10 text-white/30"
               }`}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-current" />

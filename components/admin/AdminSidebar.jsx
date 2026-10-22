@@ -68,9 +68,11 @@
 import { usePathname } from "next/navigation";
 import {
   HomeIcon,
-  ShieldCheckIcon,
-  StoreIcon,
+  ShoppingBagIcon,
+  PackageIcon,
+  WalletIcon,
   TicketPercentIcon,
+  PlusSquareIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -82,8 +84,10 @@ const AdminSidebar = () => {
 
   const sidebarLinks = [
     { name: "Dashboard", href: "/admin", icon: HomeIcon },
-    { name: "Stores", href: "/admin/stores", icon: StoreIcon },
-    { name: "Approve Store", href: "/admin/approve", icon: ShieldCheckIcon },
+    { name: "Orders", href: "/admin/orders", icon: ShoppingBagIcon },
+    { name: "Inventory", href: "/admin/inventory", icon: PackageIcon },
+    { name: "Expenses", href: "/admin/expenses", icon: WalletIcon },
+    { name: "Add Product", href: "/store/add-product", icon: PlusSquareIcon },
     { name: "Coupons", href: "/admin/coupons", icon: TicketPercentIcon },
   ];
 

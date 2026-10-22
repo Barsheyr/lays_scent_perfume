@@ -32,6 +32,10 @@ model Product {
     category    String
     gender      Gender?
     inStock     Boolean  @default(true)
+    costPrice   Float    @default(0) // what you paid per bottle
+    stock       Int      @default(0) // bottles on hand
+    trackStock  Boolean  @default(false) // turns on after first stock entry
+    lowStockAt  Int      @default(3) // alert when stock <= this
     storeId     String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
@@ -40,18 +44,39 @@ model Product {
     store      Store       @relation(fields: [storeId], references: [id], onDelete: Cascade)
     orderItems OrderItem[]
     rating     Rating[]
+    stockMoves StockMovement[]
 }
 
 enum OrderStatus {
+    PENDING_PAYMENT // Paystack order created, waiting for payment
     ORDER_PLACED
     PROCESSING
-    SHIPPED
-    DELIVERED
+    SHIPPED // legacy — treated as "out for delivery"
+    OUT_FOR_DELIVERY
+    DELIVERED // sold
+    CANCELLED
 }
 
 enum PaymentMethod {
     COD
     STRIPE
+    PAYSTACK
+}
+
+enum StockMovementType {
+    RESTOCK // goods in (purchased stock)
+    SALE // goods out (order)
+    RETURN // goods back in (cancelled order / customer return)
+    DAMAGED // goods out (broken, expired, lost)
+    ADJUSTMENT // manual correction (+/-)
+}
+
+enum ExpenseCategory {
+    STOCK_PURCHASE
+    DELIVERY
+    PACKAGING
+    MARKETING
+    OTHER
 }
 
 
@@ -70,6 +95,9 @@ model Order {
     storeId       String
     addressId     String
     isPaid        Boolean       @default(false)
+    paidAt        DateTime?
+    paymentRef    String? // Paystack reference
+    stockDeducted Boolean       @default(false)
     paymentMethod PaymentMethod
     createdAt     DateTime      @default(now())
     updatedAt     DateTime      @updatedAt
@@ -81,6 +109,9 @@ model Order {
     user    User    @relation("BuyerRelation", fields: [userId], references: [id])
     store   Store   @relation(fields: [storeId], references: [id])
     address Address @relation(fields: [addressId], references: [id])
+
+    @@index([paymentRef])
+    @@index([status])
 }
 
 // Required for creating an OrderItem: orderId, productId, quantity, price
@@ -89,6 +120,7 @@ model OrderItem {
     productId String
     quantity  Int
     price     Float
+    costPrice Float @default(0) // cost per unit at time of sale
 
     // Relations
     order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
@@ -165,4 +197,33 @@ model Store {
     Product Product[]
     Order   Order[]
     user    User      @relation(fields: [userId], references: [id])
+}
+
+// Every movement of goods in or out of stock
+model StockMovement {
+    id        String            @id @default(cuid())
+    productId String
+    type      StockMovementType
+    quantity  Int // positive = in, negative = out
+    unitCost  Float?
+    note      String?
+    orderId   String?
+    createdAt DateTime          @default(now())
+
+    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@index([productId, createdAt])
+}
+
+// Money spent running the business (stock, delivery, packaging, ads...)
+model Expense {
+    id          String          @id @default(cuid())
+    category    ExpenseCategory
+    amount      Float
+    description String
+    date        DateTime        @default(now())
+    productId   String? // set when the expense is a stock purchase
+    createdAt   DateTime        @default(now())
+
+    @@index([date])
 }

@@ -32,7 +32,10 @@ export default function StoreAddProduct() {
     price: 0,
     category: "",
     gender: "",
+    costPrice: "",
+    openingStock: "",
   });
+  const [recordExpense, setRecordExpense] = useState(true);
   const [loading, setLoading] = useState(false);
   const { getToken } = useAuth();
 
@@ -54,6 +57,9 @@ export default function StoreAddProduct() {
       formData.append("price", productInfo.price);
       formData.append("category", productInfo.category);
       formData.append("gender", productInfo.gender);
+      formData.append("costPrice", productInfo.costPrice || 0);
+      formData.append("openingStock", productInfo.openingStock || 0);
+      formData.append("recordExpense", String(recordExpense));
       Object.keys(images).forEach((key) => {
         images[key] && formData.append("images", images[key]);
       });
@@ -69,6 +75,8 @@ export default function StoreAddProduct() {
         price: 0,
         category: "",
         gender: "",
+        costPrice: "",
+        openingStock: "",
       });
       setImages({ 1: null, 2: null, 3: null, 4: null });
     } catch (error) {
@@ -186,6 +194,44 @@ export default function StoreAddProduct() {
           />
         </div>
       </div>
+
+      {/* Cost & stock */}
+      <div className="flex flex-wrap gap-5 mb-2">
+        <div className="flex flex-col gap-1.5">
+          <p className={labelClass}>Cost Price per bottle (₦)</p>
+          <input
+            type="number"
+            min="0"
+            name="costPrice"
+            onChange={onChangeHandler}
+            value={productInfo.costPrice}
+            placeholder="What you paid"
+            className={`${inputClass} max-w-45`}
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <p className={labelClass}>Opening Stock (bottles)</p>
+          <input
+            type="number"
+            min="0"
+            step="1"
+            name="openingStock"
+            onChange={onChangeHandler}
+            value={productInfo.openingStock}
+            placeholder="0"
+            className={`${inputClass} max-w-45`}
+          />
+        </div>
+      </div>
+      <label className="flex items-center gap-2 text-xs text-white/40 mb-5 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={recordExpense}
+          onChange={(e) => setRecordExpense(e.target.checked)}
+          className="accent-[#c97b63]"
+        />
+        Record opening stock cost as an expense
+      </label>
 
       {/* Category */}
       <div className="flex flex-col gap-1.5 mb-5 max-w-sm">
