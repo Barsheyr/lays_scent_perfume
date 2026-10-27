@@ -57,3 +57,14 @@ Admin → **Coupons** → **New coupon** (or **Quick setup: FIRST10**).
 Customers must be **logged in** to use a coupon; they enter it at checkout and the discount is checked again on the server before the order is saved. A cancelled order frees its coupon use; an unpaid Paystack checkout doesn't use one up. Pause a coupon to stop it instantly without deleting it.
 
 After adding this update run `npx prisma db push` once (adds the coupon usage fields).
+## New-order alerts
+Every new order (cash on delivery straight away, Paystack once payment is confirmed) can alert you three ways:
+
+1. **In the admin dashboard** — always on. The Orders link shows how many new orders need action, and a pop-up + sound appears when one comes in (checks every 30 seconds while the dashboard is open). Click **🔔 Turn on order alerts** in the sidebar to also get browser notifications when the tab is in the background.
+2. **Telegram (recommended, free, instant on your phone)**
+   - In Telegram, chat with **@BotFather** → `/newbot` → copy the token into `TELEGRAM_BOT_TOKEN`.
+   - Send any message to your new bot, then open `https://api.telegram.org/bot<TOKEN>/getUpdates` and copy the number after `"chat":{"id":` into `TELEGRAM_CHAT_IDS`.
+   - Each person to alert (you, the seller) does the "message the bot" step; list all their chat ids, comma-separated.
+3. **Email** — sign up at resend.com, create an API key → `RESEND_API_KEY`, and put the addresses in `NOTIFY_EMAILS`. With the default sender (`onboarding@resend.dev`) Resend only delivers to the email you signed up with; verify your own domain in Resend to email anyone.
+
+Add the same variables in Vercel, then redeploy.

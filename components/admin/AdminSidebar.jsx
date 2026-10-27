@@ -77,10 +77,26 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import useOrderAlerts from "./useOrderAlerts";
 
 const AdminSidebar = () => {
   const { user } = useUser();
   const pathname = usePathname();
+  const needsAction = useOrderAlerts();
+  const [alertsOn, setAlertsOn] = useState(true);
+
+  useEffect(() => {
+    if (typeof Notification !== "undefined") {
+      setAlertsOn(Notification.permission === "granted");
+    }
+  }, []);
+
+  const enableAlerts = async () => {
+    if (typeof Notification === "undefined") return;
+    const result = await Notification.requestPermission();
+    setAlertsOn(result === "granted");
+  };
 
   const sidebarLinks = [
     { name: "Dashboard", href: "/admin", icon: HomeIcon },
@@ -126,12 +142,26 @@ const AdminSidebar = () => {
                 }`}
               />
               <p className="max-sm:hidden text-sm">{link.name}</p>
+              {link.href === "/admin/orders" && needsAction > 0 && (
+                <span className="ml-auto mr-4 max-sm:absolute max-sm:top-1 max-sm:right-1 max-sm:m-0 min-w-5 h-5 px-1.5 rounded-full bg-[#c97b63] text-white text-[11px] flex items-center justify-center">
+                  {needsAction}
+                </span>
+              )}
               {pathname === link.href && (
                 <span className="absolute bg-[#c97b63] right-0 top-1.5 bottom-1.5 w-1 sm:w-1 rounded-l" />
               )}
             </Link>
           ))}
         </div>
+
+        {!alertsOn && (
+          <button
+            onClick={enableAlerts}
+            className="max-sm:hidden mx-4 mt-2 text-xs text-left px-3 py-2 rounded-xl border border-[#c97b63]/30 text-[#c97b63] hover:bg-[#c97b63]/10 transition-colors"
+          >
+            🔔 Turn on order alerts
+          </button>
+        )}
       </div>
     )
   );
