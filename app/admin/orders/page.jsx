@@ -4,7 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { SearchIcon, PhoneIcon, MapPinIcon } from "lucide-react";
+import { SearchIcon, PhoneIcon, MapPinIcon, MessageCircleIcon } from "lucide-react";
+import { whatsappLink, MESSAGE_STATUSES } from "@/lib/customerMessages";
 import Loading from "@/components/Loading";
 import {
   naira,
@@ -31,6 +32,12 @@ const NEXT_STEP = {
   PROCESSING: { to: "OUT_FOR_DELIVERY", label: "Send out for delivery" },
   SHIPPED: { to: "DELIVERED", label: "Mark as sold" },
   OUT_FOR_DELIVERY: { to: "DELIVERED", label: "Mark as sold" },
+};
+
+const STATUS_LABEL = {
+  PROCESSING: "Processing",
+  OUT_FOR_DELIVERY: "Out for delivery",
+  DELIVERED: "Delivered",
 };
 
 const shortId = (id) => "#" + id.slice(-6).toUpperCase();
@@ -80,7 +87,36 @@ function OrdersInner() {
       );
       setOrders((prev) => prev.map((o) => (o.id === order.id ? { ...o, ...data.order } : o)));
       setSelected((s) => (s && s.id === order.id ? { ...s, ...data.order } : s));
-      toast.success("Order updated");
+
+      const msgStatus = status === "SHIPPED" ? "OUT_FOR_DELIVERY" : status;
+      if (data.whatsapp?.sent) {
+        toast.success("Order updated · WhatsApp sent to customer");
+      } else if (MESSAGE_STATUSES.includes(msgStatus)) {
+        const link = whatsappLink({ ...order, ...data.order }, msgStatus);
+        if (link) {
+          toast(
+            (t) => (
+              <div className="flex items-center gap-3">
+                <span className="text-sm">Order updated. Let the customer know?</span>
+                <button
+                  onClick={() => {
+                    window.open(link, "_blank", "noopener");
+                    toast.dismiss(t.id);
+                  }}
+                  className="shrink-0 bg-[#25D366] text-white text-xs px-3 py-1.5 rounded-full"
+                >
+                  Send WhatsApp
+                </button>
+              </div>
+            ),
+            { duration: 10000, icon: "✅" }
+          );
+        } else {
+          toast.success("Order updated (no valid customer phone for WhatsApp)");
+        }
+      } else {
+        toast.success("Order updated");
+      }
     } catch (error) {
       toast.error(error?.response?.data?.error || error.message);
     } finally {
@@ -247,6 +283,21 @@ function OrdersInner() {
               {selected.paymentRef && <> · Ref {selected.paymentRef}</>}
             </p>
           </div>
+
+          {(() => {
+            const st = selected.status === "SHIPPED" ? "OUT_FOR_DELIVERY" : selected.status;
+            const link = MESSAGE_STATUSES.includes(st) && whatsappLink(selected, st);
+            return link ? (
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full mb-5 py-2.5 rounded-full bg-[#25D366]/10 border border-[#25D366]/30 text-[#4ade80] text-sm hover:bg-[#25D366]/20 transition-colors"
+              >
+                <MessageCircleIcon size={16} /> Send "{STATUS_LABEL[st]}" update on WhatsApp
+              </a>
+            ) : null;
+          })()}
 
           {selected.status !== "PENDING_PAYMENT" && (
             <>

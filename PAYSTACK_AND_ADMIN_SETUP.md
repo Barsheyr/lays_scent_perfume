@@ -68,3 +68,34 @@ Every new order (cash on delivery straight away, Paystack once payment is confir
 3. **Email** — sign up at resend.com, create an API key → `RESEND_API_KEY`, and put the addresses in `NOTIFY_EMAILS`. With the default sender (`onboarding@resend.dev`) Resend only delivers to the email you signed up with; verify your own domain in Resend to email anyone.
 
 Add the same variables in Vercel, then redeploy.
+
+## WhatsApp updates to customers
+When you move an order to **Processing**, **Out for delivery** or **Delivered**, the customer gets a WhatsApp message. Wording lives in `lib/customerMessages.js` — edit it freely.
+
+### Option A — one tap (works now, free)
+After changing a status, a pop-up offers **Send WhatsApp**. It opens WhatsApp (phone or WhatsApp Web) with the message already typed to the customer's number — you just press send. The same button is inside each order's details.
+
+### Option B — fully automatic (WhatsApp Business Cloud API)
+Messages go out by themselves from your business number. Meta charges a small fee per message (check current Nigeria rates on Meta's pricing page).
+
+1. Go to developers.facebook.com → **Create app** → type **Business** → add **WhatsApp**.
+2. Add a phone number for the shop (it can't be a number already used in the normal WhatsApp app unless you move it over).
+3. From **WhatsApp → API Setup** copy the **Phone number ID** → `WHATSAPP_PHONE_NUMBER_ID`.
+4. Create a permanent token: Business Settings → **System users** → add one → generate token with `whatsapp_business_messaging` → `WHATSAPP_TOKEN`.
+5. In **WhatsApp Manager → Message templates**, create these three (Category: **Utility**, Language: **English**). Meta must approve them before they send:
+
+**order_processing**
+```
+Hi {{1}} 👋 Thank you for shopping with Layah's Scent! 💐 We've received your order {{2}} and we're carefully preparing it for you. We'll message you again as soon as it's on its way.
+```
+**order_out_for_delivery**
+```
+Good news, {{1}}! 🚚 Your Layah's Scent order {{2}} is out for delivery and should get to you within the next 2 days. Our rider will call you before arriving, so please keep your phone close. {{3}}
+```
+**order_delivered**
+```
+Hi {{1}}, your order {{2}} has been delivered 🎉 Thank you for choosing Layah's Scent, we hope you love your new fragrance! We'll be right here when you're ready for your next scent.
+```
+6. Add both variables to `.env` and Vercel, restart/redeploy. The pop-up will then say "WhatsApp sent to customer" instead of offering the button.
+
+Keep the templates factual (order updates). Meta may re-classify heavily promotional wording as "Marketing", which costs more.
