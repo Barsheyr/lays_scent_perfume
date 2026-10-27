@@ -39,8 +39,8 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-    const order = await changeOrderStatus(orderId, status);
-    return NextResponse.json({ message: "Order updated", order });
+    const { whatsapp, ...order } = await changeOrderStatus(orderId, status);
+    return NextResponse.json({ message: "Order updated", order, whatsapp });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: error.message }, { status: 400 });
