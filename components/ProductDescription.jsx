@@ -36,49 +36,61 @@ const ProductDescription = ({ product }) => {
       {/* Reviews */}
       {selectedTab === "Reviews" && (
         <div className="flex flex-col gap-3 mt-14">
-          {product.rating.map((item, index) => (
-            <div key={index} className="flex gap-5 mb-10">
-              <Image
-                src={item.user.image}
-                alt=""
-                className="size-10 rounded-full border border-[#c97b63]/30"
-                width={100}
-                height={100}
-              />
-              <div>
-                <div className="flex items-center">
-                  {Array(5)
-                    .fill("")
-                    .map((_, index) => (
-                      <StarIcon
-                        key={index}
-                        size={18}
-                        className="text-transparent mt-0.5"
-                        fill={
-                          item.rating >= index + 1
-                            ? "#c97b63"
-                            : "rgba(255,255,255,0.1)"
-                        }
-                      />
-                    ))}
+          {(product.rating || []).length === 0 && (
+            <p className="text-white/30">
+              No reviews yet. Customers can review after their order is delivered.
+            </p>
+          )}
+          {(product.rating || []).map((item, index) => {
+            const name = item.user?.name || "Customer";
+            return (
+              <div key={index} className="flex gap-5 mb-10">
+                {item.user?.image ? (
+                  <img
+                    src={item.user.image}
+                    alt=""
+                    className="size-10 rounded-full border border-[#c97b63]/30 object-cover shrink-0"
+                  />
+                ) : (
+                  <div className="size-10 shrink-0 rounded-full border border-[#c97b63]/30 bg-[#c97b63]/10 flex items-center justify-center text-[#c97b63] font-medium">
+                    {name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div>
+                  <div className="flex items-center">
+                    {Array(5)
+                      .fill("")
+                      .map((_, i) => (
+                        <StarIcon
+                          key={i}
+                          size={18}
+                          className="text-transparent mt-0.5"
+                          fill={
+                            item.rating >= i + 1
+                              ? "#c97b63"
+                              : "rgba(255,255,255,0.1)"
+                          }
+                        />
+                      ))}
+                  </div>
+                  <p className="text-sm max-w-lg my-4 text-white/40 leading-relaxed">
+                    {item.review}
+                  </p>
+                  <p className="font-medium text-white/60">{name}</p>
+                  <p className="mt-3 font-light text-white/25">
+                    {new Date(item.createdAt).toDateString()}
+                  </p>
                 </div>
-                <p className="text-sm max-w-lg my-4 text-white/40 leading-relaxed">
-                  {item.review}
-                </p>
-                <p className="font-medium text-white/60">{item.user.name}</p>
-                <p className="mt-3 font-light text-white/25">
-                  {new Date(item.createdAt).toDateString()}
-                </p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
       {/* Store info */}
       <div className="flex gap-3 mt-14 pb-16">
         <Image
-          src={product.store.logo}
+          src={product.store?.logo || "/favicon.ico"}
           alt=""
           className="size-11 rounded-full border border-[#c97b63]/40"
           width={100}

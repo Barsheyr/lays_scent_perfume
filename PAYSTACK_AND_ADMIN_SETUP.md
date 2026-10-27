@@ -47,3 +47,15 @@ Swap `PAYSTACK_SECRET_KEY` to `sk_live_...` and set the **Live** webhook URL in 
 - **Profit on bottles sold** = selling price − cost price for sold orders.
 - Stock goes down when a COD order is placed or a Paystack payment is confirmed, and goes back up if you cancel the order.
 - Guest checkout (not logged in) still goes to WhatsApp and isn't recorded in the dashboard.
+
+## New-order alerts
+Every new order (cash on delivery straight away, Paystack once payment is confirmed) can alert you three ways:
+
+1. **In the admin dashboard** — always on. The Orders link shows how many new orders need action, and a pop-up + sound appears when one comes in (checks every 30 seconds while the dashboard is open). Click **🔔 Turn on order alerts** in the sidebar to also get browser notifications when the tab is in the background.
+2. **Telegram (recommended, free, instant on your phone)**
+   - In Telegram, chat with **@BotFather** → `/newbot` → copy the token into `TELEGRAM_BOT_TOKEN`.
+   - Send any message to your new bot, then open `https://api.telegram.org/bot<TOKEN>/getUpdates` and copy the number after `"chat":{"id":` into `TELEGRAM_CHAT_IDS`.
+   - Each person to alert (you, the seller) does the "message the bot" step; list all their chat ids, comma-separated.
+3. **Email** — sign up at resend.com, create an API key → `RESEND_API_KEY`, and put the addresses in `NOTIFY_EMAILS`. With the default sender (`onboarding@resend.dev`) Resend only delivers to the email you signed up with; verify your own domain in Resend to email anyone.
+
+Add the same variables in Vercel, then redeploy.

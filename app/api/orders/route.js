@@ -2,6 +2,7 @@ import { prisma } from "@/src/db";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { commitOrderStock } from "@/lib/orders";
+import { notifyNewOrders } from "@/lib/notify";
 import { initializeTransaction, newReference } from "@/lib/paystack";
 
 export async function POST(request) {
@@ -161,6 +162,8 @@ export async function POST(request) {
 
     // Cash on delivery: take the bottles out of stock now
     for (const id of orderIds) await commitOrderStock(id);
+
+    await notifyNewOrders(orderIds);
 
     await prisma.user.update({
       where: { id: userId },
