@@ -27,7 +27,7 @@ const OrderSummary = ({ totalPrice, items }) => {
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [paymentMethod, setPaymentMethod] = useState("PAYSTACK");
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePlaceOrder = async (e) => {
@@ -58,6 +58,12 @@ const OrderSummary = ({ totalPrice, items }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
+      if (data.authorizationUrl) {
+        toast.loading("Taking you to Paystack...");
+        window.location.href = data.authorizationUrl;
+        return;
+      }
+
       toast.success(data.message || "Order placed successfully!");
       dispatch(fetchCart({ getToken }));
       router.push("/orders");
@@ -81,17 +87,42 @@ const OrderSummary = ({ totalPrice, items }) => {
       <p className="text-[10px] tracking-[2px] uppercase text-white/25 mb-3">
         Payment Method
       </p>
-      <div className="flex items-center gap-2 bg-white/3 border border-white/8 rounded-xl px-4 py-3">
-        <input
-          type="radio"
-          id="COD"
-          onChange={() => setPaymentMethod("COD")}
-          checked={paymentMethod === "COD"}
-          className="accent-[#c97b63]"
-        />
-        <label htmlFor="COD" className="cursor-pointer text-white/50">
-          COD (Cash on Delivery)
-        </label>
+      <div className="flex flex-col gap-2">
+        {[
+          {
+            id: "PAYSTACK",
+            label: "Pay now",
+            hint: "Card, bank transfer or USSD via Paystack",
+          },
+          {
+            id: "COD",
+            label: "Cash on delivery",
+            hint: "Pay when your order arrives",
+          },
+        ].map((opt) => (
+          <label
+            key={opt.id}
+            htmlFor={opt.id}
+            className={`flex items-start gap-3 cursor-pointer border rounded-xl px-4 py-3 transition-colors ${
+              paymentMethod === opt.id
+                ? "border-[#c97b63]/50 bg-[#c97b63]/5"
+                : "border-white/8 bg-white/3 hover:border-white/15"
+            }`}
+          >
+            <input
+              type="radio"
+              id={opt.id}
+              name="paymentMethod"
+              onChange={() => setPaymentMethod(opt.id)}
+              checked={paymentMethod === opt.id}
+              className="accent-[#c97b63] mt-1"
+            />
+            <span>
+              <span className="block text-white/70">{opt.label}</span>
+              <span className="block text-xs text-white/30">{opt.hint}</span>
+            </span>
+          </label>
+        ))}
       </div>
 
       {/* Address */}
@@ -186,7 +217,11 @@ const OrderSummary = ({ totalPrice, items }) => {
         disabled={isLoading || !selectedAddress}
         className="w-full bg-[#c97b63] hover:bg-[#b56d55] text-white py-3 rounded-full active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed text-sm"
       >
-        {isLoading ? "Processing..." : "Place Order"}
+        {isLoading
+          ? "Processing..."
+          : paymentMethod === "PAYSTACK"
+            ? `Pay ${currency}${totalPrice.toLocaleString()}`
+            : "Place Order"}
       </button>
 
       {showAddressModal && (

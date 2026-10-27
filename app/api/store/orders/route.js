@@ -2,6 +2,7 @@ import authSeller from "@/middleware/authSeller";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { prisma } from "@/src/db";
+import { changeOrderStatus } from "@/lib/orders";
 
 // update seller order
 export async function POST(request) {
@@ -15,15 +16,15 @@ export async function POST(request) {
 
     const { orderId, status } = await request.json();
 
-    await prisma.order.update({
-      where: { id: orderId, storeId },
-      data: { status },
-    });
+    await changeOrderStatus(orderId, status, { storeId });
 
     return NextResponse.json({ message: "Order Status updated" });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message: "Order Status updated" });
+    return NextResponse.json(
+      { error: error.message || "Could not update order status" },
+      { status: 400 }
+    );
   }
 }
 
@@ -38,7 +39,7 @@ export async function GET(request) {
     }
 
     const orders = await prisma.order.findMany({
-      where: { storeId },
+      where: { storeId, status: { not: "PENDING_PAYMENT" } },
       include: {
         user: true,
         address: true,

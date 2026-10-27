@@ -142,18 +142,22 @@ export default function StoreOrders() {
                       }
                       className="bg-white/5 border border-white/10 text-white/50 rounded-lg text-xs px-2 py-1.5 outline-none focus:border-[#c97b63]/40 transition-colors"
                     >
-                      <option value="ORDER_PLACED" className="bg-[#0e0a0b]">
-                        ORDER_PLACED
-                      </option>
-                      <option value="PROCESSING" className="bg-[#0e0a0b]">
-                        PROCESSING
-                      </option>
-                      <option value="SHIPPED" className="bg-[#0e0a0b]">
-                        SHIPPED
-                      </option>
-                      <option value="DELIVERED" className="bg-[#0e0a0b]">
-                        DELIVERED
-                      </option>
+                      {[
+                        ["ORDER_PLACED", "Order placed"],
+                        ["PROCESSING", "Processing"],
+                        ["OUT_FOR_DELIVERY", "Out for delivery"],
+                        ["DELIVERED", "Delivered"],
+                        ["CANCELLED", "Cancelled"],
+                      ].map(([value, label]) => (
+                        <option key={value} value={value} className="bg-[#0e0a0b]">
+                          {label}
+                        </option>
+                      ))}
+                      {order.status === "SHIPPED" && (
+                        <option value="SHIPPED" className="bg-[#0e0a0b]">
+                          Shipped
+                        </option>
+                      )}
                     </select>
                   </td>
                   <td className="px-4 py-3 text-white/25 text-xs">

@@ -138,6 +138,10 @@ exports.Prisma.ProductScalarFieldEnum = {
   category: 'category',
   gender: 'gender',
   inStock: 'inStock',
+  costPrice: 'costPrice',
+  stock: 'stock',
+  trackStock: 'trackStock',
+  lowStockAt: 'lowStockAt',
   storeId: 'storeId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -151,6 +155,9 @@ exports.Prisma.OrderScalarFieldEnum = {
   storeId: 'storeId',
   addressId: 'addressId',
   isPaid: 'isPaid',
+  paidAt: 'paidAt',
+  paymentRef: 'paymentRef',
+  stockDeducted: 'stockDeducted',
   paymentMethod: 'paymentMethod',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -162,7 +169,8 @@ exports.Prisma.OrderItemScalarFieldEnum = {
   orderId: 'orderId',
   productId: 'productId',
   quantity: 'quantity',
-  price: 'price'
+  price: 'price',
+  costPrice: 'costPrice'
 };
 
 exports.Prisma.RatingScalarFieldEnum = {
@@ -217,6 +225,27 @@ exports.Prisma.StoreScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.StockMovementScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  type: 'type',
+  quantity: 'quantity',
+  unitCost: 'unitCost',
+  note: 'note',
+  orderId: 'orderId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ExpenseScalarFieldEnum = {
+  id: 'id',
+  category: 'category',
+  amount: 'amount',
+  description: 'description',
+  date: 'date',
+  productId: 'productId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -248,15 +277,35 @@ exports.Gender = exports.$Enums.Gender = {
 };
 
 exports.OrderStatus = exports.$Enums.OrderStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
   ORDER_PLACED: 'ORDER_PLACED',
   PROCESSING: 'PROCESSING',
   SHIPPED: 'SHIPPED',
-  DELIVERED: 'DELIVERED'
+  OUT_FOR_DELIVERY: 'OUT_FOR_DELIVERY',
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED'
 };
 
 exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   COD: 'COD',
-  STRIPE: 'STRIPE'
+  STRIPE: 'STRIPE',
+  PAYSTACK: 'PAYSTACK'
+};
+
+exports.StockMovementType = exports.$Enums.StockMovementType = {
+  RESTOCK: 'RESTOCK',
+  SALE: 'SALE',
+  RETURN: 'RETURN',
+  DAMAGED: 'DAMAGED',
+  ADJUSTMENT: 'ADJUSTMENT'
+};
+
+exports.ExpenseCategory = exports.$Enums.ExpenseCategory = {
+  STOCK_PURCHASE: 'STOCK_PURCHASE',
+  DELIVERY: 'DELIVERY',
+  PACKAGING: 'PACKAGING',
+  MARKETING: 'MARKETING',
+  OTHER: 'OTHER'
 };
 
 exports.Prisma.ModelName = {
@@ -267,7 +316,9 @@ exports.Prisma.ModelName = {
   Rating: 'Rating',
   Address: 'Address',
   Coupon: 'Coupon',
-  Store: 'Store'
+  Store: 'Store',
+  StockMovement: 'StockMovement',
+  Expense: 'Expense'
 };
 
 /**
