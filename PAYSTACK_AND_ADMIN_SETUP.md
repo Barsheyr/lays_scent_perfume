@@ -10,7 +10,7 @@ Removing the file from the repo does not remove it from git history, so rotating
 
 ## 2. Add environment variables in Vercel
 - `PAYSTACK_SECRET_KEY` — start with your **test** secret key (`sk_test_...`)
-- `NEXT_PUBLIC_SITE_URL` — `https://layahs-scent-perfume.vercel.app`
+- `SITE_URL` (optional) — your site address; if left out, the site uses its own address automatically
 - `NEXT_PUBLIC_CURRENCY_SYMBOL` — `₦`
 
 ## 3. Update the database
