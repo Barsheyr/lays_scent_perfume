@@ -103,6 +103,7 @@ model Order {
   updatedAt     DateTime      @updatedAt
   isCouponUsed  Boolean       @default(false)
   coupon        Json          @default("{}")
+  couponCode    String?
   orderItems    OrderItem[]
 
   // Relations
@@ -112,6 +113,7 @@ model Order {
 
   @@index([paymentRef])
   @@index([status])
+  @@index([couponCode])
 }
 
 // Required for creating an OrderItem: orderId, productId, quantity, price
@@ -168,14 +170,17 @@ model Address {
 
 // Required for creating a Coupon: code, description, discount, forNewUser, isPublic, expiresAt
 model Coupon {
-  code        String   @id
-  description String
-  discount    Float
-  forNewUser  Boolean
-  forMember   Boolean  @default(false)
-  isPublic    Boolean
-  expiresAt   DateTime
-  createdAt   DateTime @default(now())
+  code            String   @id
+  description     String
+  discount        Float
+  forNewUser      Boolean
+  forMember       Boolean  @default(false)
+  isPublic        Boolean  @default(false)
+  expiresAt       DateTime
+  maxUses         Int? // e.g. 10 for "first 10 orders"; empty = unlimited
+  oncePerCustomer Boolean  @default(true)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
 }
 
 // Required for creating a Store: userId, name, username, email, contact, logo, description, address (optional: , status, isActive)

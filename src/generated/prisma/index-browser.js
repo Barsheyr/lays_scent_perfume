@@ -162,7 +162,8 @@ exports.Prisma.OrderScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isCouponUsed: 'isCouponUsed',
-  coupon: 'coupon'
+  coupon: 'coupon',
+  couponCode: 'couponCode'
 };
 
 exports.Prisma.OrderItemScalarFieldEnum = {
@@ -206,6 +207,9 @@ exports.Prisma.CouponScalarFieldEnum = {
   forMember: 'forMember',
   isPublic: 'isPublic',
   expiresAt: 'expiresAt',
+  maxUses: 'maxUses',
+  oncePerCustomer: 'oncePerCustomer',
+  isActive: 'isActive',
   createdAt: 'createdAt'
 };
 

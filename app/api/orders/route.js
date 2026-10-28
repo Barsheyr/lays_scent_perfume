@@ -3,6 +3,7 @@ import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { commitOrderStock } from "@/lib/orders";
 import { initializeTransaction, newReference } from "@/lib/paystack";
+import { applyDiscount, checkCoupon } from "@/lib/coupons";
 
 export async function POST(request) {
   try {
@@ -14,7 +15,7 @@ export async function POST(request) {
 
     const body = await request.json();
 
-    const { addressId, items, paymentMethod } = body;
+    const { addressId, items, paymentMethod, couponCode } = body;
 
     if (!addressId) {
       return NextResponse.json({ error: "missing addressId" }, { status: 400 });
@@ -94,16 +95,27 @@ export async function POST(request) {
       });
     }
 
+    // Coupon: always re-checked here, never trusted from the browser
+    let coupon = null;
+    if (couponCode) {
+      const result = await checkCoupon(couponCode, userId);
+      if (!result.ok) {
+        return NextResponse.json({ error: result.error }, { status: 400 });
+      }
+      coupon = result.coupon;
+    }
+
     const isPaystack = paymentMethod === "PAYSTACK";
     const reference = isPaystack ? newReference() : null;
     const orderIds = [];
     let grandTotal = 0;
 
     for (const [storeId, sellerItems] of ordersByStore.entries()) {
-      const total = sellerItems.reduce(
+      const subtotal = sellerItems.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
       );
+      const total = coupon ? applyDiscount(subtotal, coupon.discount) : subtotal;
 
       const orderData = {
         userId,
@@ -113,6 +125,16 @@ export async function POST(request) {
         paymentMethod,
         status: isPaystack ? "PENDING_PAYMENT" : "ORDER_PLACED",
         paymentRef: reference,
+        ...(coupon && {
+          isCouponUsed: true,
+          couponCode: coupon.code,
+          coupon: {
+            code: coupon.code,
+            discount: coupon.discount,
+            description: coupon.description,
+            subtotal: parseFloat(subtotal.toFixed(2)),
+          },
+        }),
         orderItems: {
           create: sellerItems.map((item) => ({
             productId: item.id,

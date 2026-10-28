@@ -47,3 +47,13 @@ Swap `PAYSTACK_SECRET_KEY` to `sk_live_...` and set the **Live** webhook URL in 
 - **Profit on bottles sold** = selling price − cost price for sold orders.
 - Stock goes down when a COD order is placed or a Paystack payment is confirmed, and goes back up if you cancel the order.
 - Guest checkout (not logged in) still goes to WhatsApp and isn't recorded in the dashboard.
+
+## Coupons
+Admin → **Coupons** → **New coupon** (or **Quick setup: FIRST10**).
+- **Code**: what customers type, e.g. `FIRST10` (not case-sensitive for customers).
+- **Discount (%)**, **Ends on**, **Total uses allowed** (e.g. 10; leave empty for no limit).
+- **Once per customer** and **First order only** switches.
+
+Customers must be **logged in** to use a coupon; they enter it at checkout and the discount is checked again on the server before the order is saved. A cancelled order frees its coupon use; an unpaid Paystack checkout doesn't use one up. Pause a coupon to stop it instantly without deleting it.
+
+After adding this update run `npx prisma db push` once (adds the coupon usage fields).

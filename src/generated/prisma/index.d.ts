@@ -4485,6 +4485,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isCouponUsed: boolean | null
+    couponCode: string | null
   }
 
   export type OrderMaxAggregateOutputType = {
@@ -4502,6 +4503,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isCouponUsed: boolean | null
+    couponCode: string | null
   }
 
   export type OrderCountAggregateOutputType = {
@@ -4520,6 +4522,7 @@ export namespace Prisma {
     updatedAt: number
     isCouponUsed: number
     coupon: number
+    couponCode: number
     _all: number
   }
 
@@ -4547,6 +4550,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isCouponUsed?: true
+    couponCode?: true
   }
 
   export type OrderMaxAggregateInputType = {
@@ -4564,6 +4568,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isCouponUsed?: true
+    couponCode?: true
   }
 
   export type OrderCountAggregateInputType = {
@@ -4582,6 +4587,7 @@ export namespace Prisma {
     updatedAt?: true
     isCouponUsed?: true
     coupon?: true
+    couponCode?: true
     _all?: true
   }
 
@@ -4687,6 +4693,7 @@ export namespace Prisma {
     updatedAt: Date
     isCouponUsed: boolean
     coupon: JsonValue
+    couponCode: string | null
     _count: OrderCountAggregateOutputType | null
     _avg: OrderAvgAggregateOutputType | null
     _sum: OrderSumAggregateOutputType | null
@@ -4724,6 +4731,7 @@ export namespace Prisma {
     updatedAt?: boolean
     isCouponUsed?: boolean
     coupon?: boolean
+    couponCode?: boolean
     orderItems?: boolean | Order$orderItemsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     store?: boolean | StoreDefaultArgs<ExtArgs>
@@ -4747,6 +4755,7 @@ export namespace Prisma {
     updatedAt?: boolean
     isCouponUsed?: boolean
     coupon?: boolean
+    couponCode?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     store?: boolean | StoreDefaultArgs<ExtArgs>
     address?: boolean | AddressDefaultArgs<ExtArgs>
@@ -4768,6 +4777,7 @@ export namespace Prisma {
     updatedAt?: boolean
     isCouponUsed?: boolean
     coupon?: boolean
+    couponCode?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     store?: boolean | StoreDefaultArgs<ExtArgs>
     address?: boolean | AddressDefaultArgs<ExtArgs>
@@ -4789,9 +4799,10 @@ export namespace Prisma {
     updatedAt?: boolean
     isCouponUsed?: boolean
     coupon?: boolean
+    couponCode?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "total" | "status" | "userId" | "storeId" | "addressId" | "isPaid" | "paidAt" | "paymentRef" | "stockDeducted" | "paymentMethod" | "createdAt" | "updatedAt" | "isCouponUsed" | "coupon", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "total" | "status" | "userId" | "storeId" | "addressId" | "isPaid" | "paidAt" | "paymentRef" | "stockDeducted" | "paymentMethod" | "createdAt" | "updatedAt" | "isCouponUsed" | "coupon" | "couponCode", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderItems?: boolean | Order$orderItemsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4834,6 +4845,7 @@ export namespace Prisma {
       updatedAt: Date
       isCouponUsed: boolean
       coupon: Prisma.JsonValue
+      couponCode: string | null
     }, ExtArgs["result"]["order"]>
     composites: {}
   }
@@ -5276,6 +5288,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Order", 'DateTime'>
     readonly isCouponUsed: FieldRef<"Order", 'Boolean'>
     readonly coupon: FieldRef<"Order", 'Json'>
+    readonly couponCode: FieldRef<"Order", 'String'>
   }
     
 
@@ -9161,10 +9174,12 @@ export namespace Prisma {
 
   export type CouponAvgAggregateOutputType = {
     discount: number | null
+    maxUses: number | null
   }
 
   export type CouponSumAggregateOutputType = {
     discount: number | null
+    maxUses: number | null
   }
 
   export type CouponMinAggregateOutputType = {
@@ -9175,6 +9190,9 @@ export namespace Prisma {
     forMember: boolean | null
     isPublic: boolean | null
     expiresAt: Date | null
+    maxUses: number | null
+    oncePerCustomer: boolean | null
+    isActive: boolean | null
     createdAt: Date | null
   }
 
@@ -9186,6 +9204,9 @@ export namespace Prisma {
     forMember: boolean | null
     isPublic: boolean | null
     expiresAt: Date | null
+    maxUses: number | null
+    oncePerCustomer: boolean | null
+    isActive: boolean | null
     createdAt: Date | null
   }
 
@@ -9197,6 +9218,9 @@ export namespace Prisma {
     forMember: number
     isPublic: number
     expiresAt: number
+    maxUses: number
+    oncePerCustomer: number
+    isActive: number
     createdAt: number
     _all: number
   }
@@ -9204,10 +9228,12 @@ export namespace Prisma {
 
   export type CouponAvgAggregateInputType = {
     discount?: true
+    maxUses?: true
   }
 
   export type CouponSumAggregateInputType = {
     discount?: true
+    maxUses?: true
   }
 
   export type CouponMinAggregateInputType = {
@@ -9218,6 +9244,9 @@ export namespace Prisma {
     forMember?: true
     isPublic?: true
     expiresAt?: true
+    maxUses?: true
+    oncePerCustomer?: true
+    isActive?: true
     createdAt?: true
   }
 
@@ -9229,6 +9258,9 @@ export namespace Prisma {
     forMember?: true
     isPublic?: true
     expiresAt?: true
+    maxUses?: true
+    oncePerCustomer?: true
+    isActive?: true
     createdAt?: true
   }
 
@@ -9240,6 +9272,9 @@ export namespace Prisma {
     forMember?: true
     isPublic?: true
     expiresAt?: true
+    maxUses?: true
+    oncePerCustomer?: true
+    isActive?: true
     createdAt?: true
     _all?: true
   }
@@ -9338,6 +9373,9 @@ export namespace Prisma {
     forMember: boolean
     isPublic: boolean
     expiresAt: Date
+    maxUses: number | null
+    oncePerCustomer: boolean
+    isActive: boolean
     createdAt: Date
     _count: CouponCountAggregateOutputType | null
     _avg: CouponAvgAggregateOutputType | null
@@ -9368,6 +9406,9 @@ export namespace Prisma {
     forMember?: boolean
     isPublic?: boolean
     expiresAt?: boolean
+    maxUses?: boolean
+    oncePerCustomer?: boolean
+    isActive?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["coupon"]>
 
@@ -9379,6 +9420,9 @@ export namespace Prisma {
     forMember?: boolean
     isPublic?: boolean
     expiresAt?: boolean
+    maxUses?: boolean
+    oncePerCustomer?: boolean
+    isActive?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["coupon"]>
 
@@ -9390,6 +9434,9 @@ export namespace Prisma {
     forMember?: boolean
     isPublic?: boolean
     expiresAt?: boolean
+    maxUses?: boolean
+    oncePerCustomer?: boolean
+    isActive?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["coupon"]>
 
@@ -9401,10 +9448,13 @@ export namespace Prisma {
     forMember?: boolean
     isPublic?: boolean
     expiresAt?: boolean
+    maxUses?: boolean
+    oncePerCustomer?: boolean
+    isActive?: boolean
     createdAt?: boolean
   }
 
-  export type CouponOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"code" | "description" | "discount" | "forNewUser" | "forMember" | "isPublic" | "expiresAt" | "createdAt", ExtArgs["result"]["coupon"]>
+  export type CouponOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"code" | "description" | "discount" | "forNewUser" | "forMember" | "isPublic" | "expiresAt" | "maxUses" | "oncePerCustomer" | "isActive" | "createdAt", ExtArgs["result"]["coupon"]>
 
   export type $CouponPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Coupon"
@@ -9417,6 +9467,9 @@ export namespace Prisma {
       forMember: boolean
       isPublic: boolean
       expiresAt: Date
+      maxUses: number | null
+      oncePerCustomer: boolean
+      isActive: boolean
       createdAt: Date
     }, ExtArgs["result"]["coupon"]>
     composites: {}
@@ -9848,6 +9901,9 @@ export namespace Prisma {
     readonly forMember: FieldRef<"Coupon", 'Boolean'>
     readonly isPublic: FieldRef<"Coupon", 'Boolean'>
     readonly expiresAt: FieldRef<"Coupon", 'DateTime'>
+    readonly maxUses: FieldRef<"Coupon", 'Int'>
+    readonly oncePerCustomer: FieldRef<"Coupon", 'Boolean'>
+    readonly isActive: FieldRef<"Coupon", 'Boolean'>
     readonly createdAt: FieldRef<"Coupon", 'DateTime'>
   }
     
@@ -13707,7 +13763,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     isCouponUsed: 'isCouponUsed',
-    coupon: 'coupon'
+    coupon: 'coupon',
+    couponCode: 'couponCode'
   };
 
   export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -13763,6 +13820,9 @@ export namespace Prisma {
     forMember: 'forMember',
     isPublic: 'isPublic',
     expiresAt: 'expiresAt',
+    maxUses: 'maxUses',
+    oncePerCustomer: 'oncePerCustomer',
+    isActive: 'isActive',
     createdAt: 'createdAt'
   };
 
@@ -14214,6 +14274,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     isCouponUsed?: BoolFilter<"Order"> | boolean
     coupon?: JsonFilter<"Order">
+    couponCode?: StringNullableFilter<"Order"> | string | null
     orderItems?: OrderItemListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     store?: XOR<StoreScalarRelationFilter, StoreWhereInput>
@@ -14236,6 +14297,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     isCouponUsed?: SortOrder
     coupon?: SortOrder
+    couponCode?: SortOrderInput | SortOrder
     orderItems?: OrderItemOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
     store?: StoreOrderByWithRelationInput
@@ -14261,6 +14323,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     isCouponUsed?: BoolFilter<"Order"> | boolean
     coupon?: JsonFilter<"Order">
+    couponCode?: StringNullableFilter<"Order"> | string | null
     orderItems?: OrderItemListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     store?: XOR<StoreScalarRelationFilter, StoreWhereInput>
@@ -14283,6 +14346,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     isCouponUsed?: SortOrder
     coupon?: SortOrder
+    couponCode?: SortOrderInput | SortOrder
     _count?: OrderCountOrderByAggregateInput
     _avg?: OrderAvgOrderByAggregateInput
     _max?: OrderMaxOrderByAggregateInput
@@ -14309,6 +14373,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     isCouponUsed?: BoolWithAggregatesFilter<"Order"> | boolean
     coupon?: JsonWithAggregatesFilter<"Order">
+    couponCode?: StringNullableWithAggregatesFilter<"Order"> | string | null
   }
 
   export type OrderItemWhereInput = {
@@ -14547,6 +14612,9 @@ export namespace Prisma {
     forMember?: BoolFilter<"Coupon"> | boolean
     isPublic?: BoolFilter<"Coupon"> | boolean
     expiresAt?: DateTimeFilter<"Coupon"> | Date | string
+    maxUses?: IntNullableFilter<"Coupon"> | number | null
+    oncePerCustomer?: BoolFilter<"Coupon"> | boolean
+    isActive?: BoolFilter<"Coupon"> | boolean
     createdAt?: DateTimeFilter<"Coupon"> | Date | string
   }
 
@@ -14558,6 +14626,9 @@ export namespace Prisma {
     forMember?: SortOrder
     isPublic?: SortOrder
     expiresAt?: SortOrder
+    maxUses?: SortOrderInput | SortOrder
+    oncePerCustomer?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -14572,6 +14643,9 @@ export namespace Prisma {
     forMember?: BoolFilter<"Coupon"> | boolean
     isPublic?: BoolFilter<"Coupon"> | boolean
     expiresAt?: DateTimeFilter<"Coupon"> | Date | string
+    maxUses?: IntNullableFilter<"Coupon"> | number | null
+    oncePerCustomer?: BoolFilter<"Coupon"> | boolean
+    isActive?: BoolFilter<"Coupon"> | boolean
     createdAt?: DateTimeFilter<"Coupon"> | Date | string
   }, "code">
 
@@ -14583,6 +14657,9 @@ export namespace Prisma {
     forMember?: SortOrder
     isPublic?: SortOrder
     expiresAt?: SortOrder
+    maxUses?: SortOrderInput | SortOrder
+    oncePerCustomer?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     _count?: CouponCountOrderByAggregateInput
     _avg?: CouponAvgOrderByAggregateInput
@@ -14602,6 +14679,9 @@ export namespace Prisma {
     forMember?: BoolWithAggregatesFilter<"Coupon"> | boolean
     isPublic?: BoolWithAggregatesFilter<"Coupon"> | boolean
     expiresAt?: DateTimeWithAggregatesFilter<"Coupon"> | Date | string
+    maxUses?: IntNullableWithAggregatesFilter<"Coupon"> | number | null
+    oncePerCustomer?: BoolWithAggregatesFilter<"Coupon"> | boolean
+    isActive?: BoolWithAggregatesFilter<"Coupon"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Coupon"> | Date | string
   }
 
@@ -15071,6 +15151,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutOrderInput
     user: UserCreateNestedOneWithoutBuyerOrdersInput
     store: StoreCreateNestedOneWithoutOrderInput
@@ -15093,6 +15174,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -15109,6 +15191,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutOrderNestedInput
     user?: UserUpdateOneRequiredWithoutBuyerOrdersNestedInput
     store?: StoreUpdateOneRequiredWithoutOrderNestedInput
@@ -15131,6 +15214,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -15150,6 +15234,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
   }
 
   export type OrderUpdateManyMutationInput = {
@@ -15165,6 +15250,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderUncheckedUpdateManyInput = {
@@ -15183,6 +15269,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderItemCreateInput = {
@@ -15421,8 +15508,11 @@ export namespace Prisma {
     discount: number
     forNewUser: boolean
     forMember?: boolean
-    isPublic: boolean
+    isPublic?: boolean
     expiresAt: Date | string
+    maxUses?: number | null
+    oncePerCustomer?: boolean
+    isActive?: boolean
     createdAt?: Date | string
   }
 
@@ -15432,8 +15522,11 @@ export namespace Prisma {
     discount: number
     forNewUser: boolean
     forMember?: boolean
-    isPublic: boolean
+    isPublic?: boolean
     expiresAt: Date | string
+    maxUses?: number | null
+    oncePerCustomer?: boolean
+    isActive?: boolean
     createdAt?: Date | string
   }
 
@@ -15445,6 +15538,9 @@ export namespace Prisma {
     forMember?: BoolFieldUpdateOperationsInput | boolean
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    oncePerCustomer?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15456,6 +15552,9 @@ export namespace Prisma {
     forMember?: BoolFieldUpdateOperationsInput | boolean
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    oncePerCustomer?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15465,8 +15564,11 @@ export namespace Prisma {
     discount: number
     forNewUser: boolean
     forMember?: boolean
-    isPublic: boolean
+    isPublic?: boolean
     expiresAt: Date | string
+    maxUses?: number | null
+    oncePerCustomer?: boolean
+    isActive?: boolean
     createdAt?: Date | string
   }
 
@@ -15478,6 +15580,9 @@ export namespace Prisma {
     forMember?: BoolFieldUpdateOperationsInput | boolean
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    oncePerCustomer?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -15489,6 +15594,9 @@ export namespace Prisma {
     forMember?: BoolFieldUpdateOperationsInput | boolean
     isPublic?: BoolFieldUpdateOperationsInput | boolean
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    oncePerCustomer?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -16198,6 +16306,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     isCouponUsed?: SortOrder
     coupon?: SortOrder
+    couponCode?: SortOrder
   }
 
   export type OrderAvgOrderByAggregateInput = {
@@ -16219,6 +16328,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isCouponUsed?: SortOrder
+    couponCode?: SortOrder
   }
 
   export type OrderMinOrderByAggregateInput = {
@@ -16236,6 +16346,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isCouponUsed?: SortOrder
+    couponCode?: SortOrder
   }
 
   export type OrderSumOrderByAggregateInput = {
@@ -16416,6 +16527,17 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type CouponCountOrderByAggregateInput = {
     code?: SortOrder
     description?: SortOrder
@@ -16424,11 +16546,15 @@ export namespace Prisma {
     forMember?: SortOrder
     isPublic?: SortOrder
     expiresAt?: SortOrder
+    maxUses?: SortOrder
+    oncePerCustomer?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
   }
 
   export type CouponAvgOrderByAggregateInput = {
     discount?: SortOrder
+    maxUses?: SortOrder
   }
 
   export type CouponMaxOrderByAggregateInput = {
@@ -16439,6 +16565,9 @@ export namespace Prisma {
     forMember?: SortOrder
     isPublic?: SortOrder
     expiresAt?: SortOrder
+    maxUses?: SortOrder
+    oncePerCustomer?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -16450,11 +16579,31 @@ export namespace Prisma {
     forMember?: SortOrder
     isPublic?: SortOrder
     expiresAt?: SortOrder
+    maxUses?: SortOrder
+    oncePerCustomer?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
   }
 
   export type CouponSumOrderByAggregateInput = {
     discount?: SortOrder
+    maxUses?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ProductListRelationFilter = {
@@ -17208,6 +17357,14 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type ProductCreateNestedManyWithoutStoreInput = {
     create?: XOR<ProductCreateWithoutStoreInput, ProductUncheckedCreateWithoutStoreInput> | ProductCreateWithoutStoreInput[] | ProductUncheckedCreateWithoutStoreInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutStoreInput | ProductCreateOrConnectWithoutStoreInput[]
@@ -17600,11 +17757,20 @@ export namespace Prisma {
     _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
   }
 
-  export type NestedEnumStockMovementTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.StockMovementType | EnumStockMovementTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.StockMovementType[] | ListEnumStockMovementTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StockMovementType[] | ListEnumStockMovementTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumStockMovementTypeFilter<$PrismaModel> | $Enums.StockMovementType
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -17616,6 +17782,13 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumStockMovementTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StockMovementType | EnumStockMovementTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.StockMovementType[] | ListEnumStockMovementTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StockMovementType[] | ListEnumStockMovementTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStockMovementTypeFilter<$PrismaModel> | $Enums.StockMovementType
   }
 
   export type NestedEnumStockMovementTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -17781,6 +17954,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutOrderInput
     store: StoreCreateNestedOneWithoutOrderInput
     address: AddressCreateNestedOneWithoutOrderInput
@@ -17801,6 +17975,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -17957,6 +18132,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     isCouponUsed?: BoolFilter<"Order"> | boolean
     coupon?: JsonFilter<"Order">
+    couponCode?: StringNullableFilter<"Order"> | string | null
   }
 
   export type StoreCreateWithoutProductInput = {
@@ -18469,6 +18645,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     user: UserCreateNestedOneWithoutBuyerOrdersInput
     store: StoreCreateNestedOneWithoutOrderInput
     address: AddressCreateNestedOneWithoutOrderInput
@@ -18490,6 +18667,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
   }
 
   export type OrderCreateOrConnectWithoutOrderItemsInput = {
@@ -18568,6 +18746,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutBuyerOrdersNestedInput
     store?: StoreUpdateOneRequiredWithoutOrderNestedInput
     address?: AddressUpdateOneRequiredWithoutOrderNestedInput
@@ -18589,6 +18768,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductUpsertWithoutOrderItemsInput = {
@@ -18817,6 +18997,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutOrderInput
     user: UserCreateNestedOneWithoutBuyerOrdersInput
     store: StoreCreateNestedOneWithoutOrderInput
@@ -18837,6 +19018,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -18991,6 +19173,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     orderItems?: OrderItemCreateNestedManyWithoutOrderInput
     user: UserCreateNestedOneWithoutBuyerOrdersInput
     address: AddressCreateNestedOneWithoutOrderInput
@@ -19011,6 +19194,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
     orderItems?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
   }
 
@@ -19276,6 +19460,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
   }
 
   export type RatingUpdateWithoutUserInput = {
@@ -19362,6 +19547,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutOrderNestedInput
     store?: StoreUpdateOneRequiredWithoutOrderNestedInput
     address?: AddressUpdateOneRequiredWithoutOrderNestedInput
@@ -19382,6 +19568,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -19400,6 +19587,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrderItemCreateManyProductInput = {
@@ -19553,6 +19741,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
   }
 
   export type OrderUpdateWithoutAddressInput = {
@@ -19568,6 +19757,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutOrderNestedInput
     user?: UserUpdateOneRequiredWithoutBuyerOrdersNestedInput
     store?: StoreUpdateOneRequiredWithoutOrderNestedInput
@@ -19588,6 +19778,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -19606,6 +19797,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProductCreateManyStoreInput = {
@@ -19641,6 +19833,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     isCouponUsed?: boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: string | null
   }
 
   export type ProductUpdateWithoutStoreInput = {
@@ -19716,6 +19909,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUpdateManyWithoutOrderNestedInput
     user?: UserUpdateOneRequiredWithoutBuyerOrdersNestedInput
     address?: AddressUpdateOneRequiredWithoutOrderNestedInput
@@ -19736,6 +19930,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
     orderItems?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   }
 
@@ -19754,6 +19949,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isCouponUsed?: BoolFieldUpdateOperationsInput | boolean
     coupon?: JsonNullValueInput | InputJsonValue
+    couponCode?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

@@ -173,6 +173,7 @@ function OrdersInner() {
                   <p className="text-sm text-white/80">{naira(o.total)}</p>
                   <p className={`text-[11px] ${o.isPaid ? "text-emerald-300/70" : "text-white/30"}`}>
                     {o.paymentMethod === "PAYSTACK" ? "Paystack" : "Cash on delivery"} · {o.isPaid ? "Paid" : "Unpaid"}
+                    {o.isCouponUsed && o.coupon?.code ? ` · ${o.coupon.code}` : ""}
                   </p>
                 </div>
                 <StatusBadge status={o.status} />
@@ -216,7 +217,15 @@ function OrdersInner() {
             ))}
           </div>
 
-          <div className="flex justify-between border-t border-white/8 pt-3 mb-5 text-sm">
+          {selected.isCouponUsed && selected.coupon?.code && (
+            <div className="flex justify-between border-t border-white/8 pt-3 text-sm">
+              <span>Coupon {selected.coupon.code} (−{selected.coupon.discount}%)</span>
+              {selected.coupon.subtotal ? (
+                <span className="text-[#c97b63]">−{naira(selected.coupon.subtotal - selected.total)}</span>
+              ) : null}
+            </div>
+          )}
+          <div className={`flex justify-between ${selected.isCouponUsed ? "pt-1" : "border-t border-white/8 pt-3"} mb-5 text-sm`}>
             <span>Total</span>
             <span className="text-white">{naira(selected.total)}</span>
           </div>

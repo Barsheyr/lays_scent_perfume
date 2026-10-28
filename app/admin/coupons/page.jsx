@@ -1,135 +1,307 @@
-'use client'
-import { useEffect, useState } from "react"
-import { format } from "date-fns"
-import toast from "react-hot-toast"
-import { DeleteIcon } from "lucide-react"
-import { couponDummyData } from "@/assets/assets"
+"use client";
+import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { PlusIcon, Trash2Icon, PauseIcon, PlayIcon, CopyIcon } from "lucide-react";
+import Loading from "@/components/Loading";
+import {
+  PageHeader,
+  Modal,
+  inputCls,
+  btnPrimary,
+  btnGhost,
+} from "@/components/admin/ui";
+
+const inDays = (n) => {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return d.toISOString().slice(0, 10);
+};
+const today = () => new Date().toISOString().slice(0, 10);
+
+const emptyForm = () => ({
+  code: "",
+  discount: "",
+  description: "",
+  expiresAt: inDays(30),
+  maxUses: "",
+  forNewUser: false,
+  oncePerCustomer: true,
+});
+
+const FIRST10 = {
+  code: "FIRST10",
+  discount: "10",
+  description: "10% off for our first 10 customers",
+  expiresAt: inDays(30),
+  maxUses: "10",
+  forNewUser: true,
+  oncePerCustomer: true,
+};
+
+function statusOf(c) {
+  if (!c.isActive) return { label: "Paused", cls: "bg-white/5 text-white/40 border-white/10" };
+  if (new Date(c.expiresAt) < new Date()) return { label: "Expired", cls: "bg-red-500/10 text-red-300 border-red-400/20" };
+  if (c.maxUses != null && c.used >= c.maxUses) return { label: "Fully used", cls: "bg-amber-500/10 text-amber-300 border-amber-400/20" };
+  return { label: "Active", cls: "bg-emerald-500/10 text-emerald-300 border-emerald-400/20" };
+}
+
+function Toggle({ checked, onChange, label, hint }) {
+  return (
+    <label className="flex items-start gap-3 cursor-pointer">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="mt-1 accent-[#c97b63] w-4 h-4"
+      />
+      <span>
+        <span className="block text-sm text-white/75">{label}</span>
+        <span className="block text-xs text-white/35">{hint}</span>
+      </span>
+    </label>
+  );
+}
 
 export default function AdminCoupons() {
+  const { getToken } = useAuth();
+  const [coupons, setCoupons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState(null);
+  const [saving, setSaving] = useState(false);
 
-    const [coupons, setCoupons] = useState([])
+  const auth = async () => ({ headers: { Authorization: `Bearer ${await getToken()}` } });
 
-    const [newCoupon, setNewCoupon] = useState({
-        code: '',
-        description: '',
-        discount: '',
-        forNewUser: false,
-        forMember: false,
-        isPublic: false,
-        expiresAt: new Date()
-    })
-
-    const fetchCoupons = async () => {
-        setCoupons(couponDummyData)
+  const fetchCoupons = async () => {
+    try {
+      const { data } = await axios.get("/api/admin/coupons", await auth());
+      setCoupons(data.coupons);
+    } catch (error) {
+      toast.error(error?.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const handleAddCoupon = async (e) => {
-        e.preventDefault()
-        // Logic to add a coupon
+  useEffect(() => {
+    fetchCoupons();
+  }, []);
 
-
+  const submit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await axios.post("/api/admin/coupons", form, await auth());
+      toast.success(`Coupon ${form.code.toUpperCase()} created`);
+      setForm(null);
+      fetchCoupons();
+    } catch (error) {
+      toast.error(error?.response?.data?.error || error.message);
+    } finally {
+      setSaving(false);
     }
+  };
 
-    const handleChange = (e) => {
-        setNewCoupon({ ...newCoupon, [e.target.name]: e.target.value })
+  const toggleActive = async (c) => {
+    try {
+      await axios.patch("/api/admin/coupons", { code: c.code, isActive: !c.isActive }, await auth());
+      setCoupons((prev) => prev.map((x) => (x.code === c.code ? { ...x, isActive: !c.isActive } : x)));
+      toast.success(c.isActive ? `${c.code} paused` : `${c.code} is live again`);
+    } catch (error) {
+      toast.error(error?.response?.data?.error || error.message);
     }
+  };
 
-    const deleteCoupon = async (code) => {
-        // Logic to delete a coupon
-
-
+  const remove = async (c) => {
+    if (!confirm(`Delete coupon ${c.code}? Orders that already used it keep their discount.`)) return;
+    try {
+      await axios.delete(`/api/admin/coupons?code=${encodeURIComponent(c.code)}`, await auth());
+      setCoupons((prev) => prev.filter((x) => x.code !== c.code));
+      toast.success("Coupon deleted");
+    } catch (error) {
+      toast.error(error?.response?.data?.error || error.message);
     }
+  };
 
-    useEffect(() => {
-        fetchCoupons();
-    }, [])
+  const copy = async (code) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      toast.success(`${code} copied`);
+    } catch {}
+  };
 
-    return (
-        <div className="text-slate-500 mb-40">
+  if (loading) return <Loading />;
 
-            {/* Add Coupon */}
-            <form onSubmit={(e) => toast.promise(handleAddCoupon(e), { loading: "Adding coupon..." })} className="max-w-sm text-sm">
-                <h2 className="text-2xl">Add <span className="text-slate-800 font-medium">Coupons</span></h2>
-                <div className="flex gap-2 max-sm:flex-col mt-2">
-                    <input type="text" placeholder="Coupon Code" className="w-full mt-2 p-2 border border-slate-200 outline-slate-400 rounded-md"
-                        name="code" value={newCoupon.code} onChange={handleChange} required
-                    />
-                    <input type="number" placeholder="Coupon Discount (%)" min={1} max={100} className="w-full mt-2 p-2 border border-slate-200 outline-slate-400 rounded-md"
-                        name="discount" value={newCoupon.discount} onChange={handleChange} required
-                    />
-                </div>
-                <input type="text" placeholder="Coupon Description" className="w-full mt-2 p-2 border border-slate-200 outline-slate-400 rounded-md"
-                    name="description" value={newCoupon.description} onChange={handleChange} required
-                />
+  const hasFirst10 = coupons.some((c) => c.code === "FIRST10");
 
-                <label>
-                    <p className="mt-3">Coupon Expiry Date</p>
-                    <input type="date" placeholder="Coupon Expires At" className="w-full mt-1 p-2 border border-slate-200 outline-slate-400 rounded-md"
-                        name="expiresAt" value={format(newCoupon.expiresAt, 'yyyy-MM-dd')} onChange={handleChange}
-                    />
-                </label>
-
-                <div className="mt-5">
-                    <div className="flex gap-2 mt-3">
-                        <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
-                            <input type="checkbox" className="sr-only peer"
-                                name="forNewUser" checked={newCoupon.forNewUser}
-                                onChange={(e) => setNewCoupon({ ...newCoupon, forNewUser: e.target.checked })}
-                            />
-                            <div className="w-11 h-6 bg-slate-300 rounded-full peer peer-checked:bg-green-600 transition-colors duration-200"></div>
-                            <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
-                        </label>
-                        <p>For New User</p>
-                    </div>
-                    <div className="flex gap-2 mt-3">
-                        <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
-                            <input type="checkbox" className="sr-only peer"
-                                name="forMember" checked={newCoupon.forMember}
-                                onChange={(e) => setNewCoupon({ ...newCoupon, forMember: e.target.checked })}
-                            />
-                            <div className="w-11 h-6 bg-slate-300 rounded-full peer peer-checked:bg-green-600 transition-colors duration-200"></div>
-                            <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
-                        </label>
-                        <p>For Member</p>
-                    </div>
-                </div>
-                <button className="mt-4 p-2 px-10 rounded bg-slate-700 text-white active:scale-95 transition">Add Coupon</button>
-            </form>
-
-            {/* List Coupons */}
-            <div className="mt-14">
-                <h2 className="text-2xl">List <span className="text-slate-800 font-medium">Coupons</span></h2>
-                <div className="overflow-x-auto mt-4 rounded-lg border border-slate-200 max-w-4xl">
-                    <table className="min-w-full bg-white text-sm">
-                        <thead className="bg-slate-50">
-                            <tr>
-                                <th className="py-3 px-4 text-left font-semibold text-slate-600">Code</th>
-                                <th className="py-3 px-4 text-left font-semibold text-slate-600">Description</th>
-                                <th className="py-3 px-4 text-left font-semibold text-slate-600">Discount</th>
-                                <th className="py-3 px-4 text-left font-semibold text-slate-600">Expires At</th>
-                                <th className="py-3 px-4 text-left font-semibold text-slate-600">New User</th>
-                                <th className="py-3 px-4 text-left font-semibold text-slate-600">For Member</th>
-                                <th className="py-3 px-4 text-left font-semibold text-slate-600">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-200">
-                            {coupons.map((coupon) => (
-                                <tr key={coupon.code} className="hover:bg-slate-50">
-                                    <td className="py-3 px-4 font-medium text-slate-800">{coupon.code}</td>
-                                    <td className="py-3 px-4 text-slate-800">{coupon.description}</td>
-                                    <td className="py-3 px-4 text-slate-800">{coupon.discount}%</td>
-                                    <td className="py-3 px-4 text-slate-800">{format(coupon.expiresAt, 'yyyy-MM-dd')}</td>
-                                    <td className="py-3 px-4 text-slate-800">{coupon.forNewUser ? 'Yes' : 'No'}</td>
-                                    <td className="py-3 px-4 text-slate-800">{coupon.forMember ? 'Yes' : 'No'}</td>
-                                    <td className="py-3 px-4 text-slate-800">
-                                        <DeleteIcon onClick={() => toast.promise(deleteCoupon(coupon.code), { loading: "Deleting coupon..." })} className="w-5 h-5 text-red-500 hover:text-red-800 cursor-pointer" />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+  return (
+    <div className="text-white/50 pb-24 max-w-6xl">
+      <PageHeader eyebrow="Promotions" title="Discount" accent="Coupons">
+        <div className="flex flex-wrap gap-2">
+          {!hasFirst10 && (
+            <button onClick={() => setForm({ ...FIRST10, expiresAt: inDays(30) })} className={btnGhost}>
+              Quick setup: FIRST10
+            </button>
+          )}
+          <button onClick={() => setForm(emptyForm())} className={`${btnPrimary} flex items-center gap-1.5`}>
+            <PlusIcon size={16} /> New coupon
+          </button>
         </div>
-    )
+      </PageHeader>
+
+      {coupons.length === 0 ? (
+        <div className="border border-white/8 bg-white/3 rounded-2xl p-10 text-center">
+          <p className="text-white/70 mb-1">No coupons yet</p>
+          <p className="text-sm text-white/35">
+            Create one, then customers can enter it at checkout for a discount.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-3">
+          {coupons.map((c) => {
+            const st = statusOf(c);
+            const pct = c.maxUses ? Math.min(100, (c.used / c.maxUses) * 100) : 0;
+            return (
+              <div key={c.code} className="flex flex-wrap items-center gap-x-6 gap-y-3 border border-white/8 bg-white/3 rounded-2xl px-5 py-4">
+                <div className="min-w-[180px] flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="text-lg text-white tracking-wider font-medium">{c.code}</p>
+                    <button onClick={() => copy(c.code)} aria-label={`Copy ${c.code}`} className="p-1 text-white/30 hover:text-white">
+                      <CopyIcon size={14} />
+                    </button>
+                  </div>
+                  <p className="text-xs text-white/35">{c.description}</p>
+                </div>
+                <p className="text-2xl text-[#c97b63] w-20">{c.discount}%</p>
+                <div className="w-40">
+                  <p className="text-sm text-white/70">
+                    {c.used} {c.maxUses ? `of ${c.maxUses}` : ""} used
+                  </p>
+                  {c.maxUses ? (
+                    <div className="h-1.5 mt-1.5 rounded-full bg-white/5 overflow-hidden">
+                      <div className="h-full bg-[#c97b63] rounded-full" style={{ width: `${pct}%` }} />
+                    </div>
+                  ) : (
+                    <p className="text-[11px] text-white/30">No limit</p>
+                  )}
+                </div>
+                <div className="text-xs text-white/40 w-40">
+                  <p>Ends {new Date(c.expiresAt).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}</p>
+                  <p>
+                    {[c.forNewUser && "First order only", c.oncePerCustomer && "Once per customer"].filter(Boolean).join(" · ") || "Anyone, any time"}
+                  </p>
+                </div>
+                <span className={`text-[11px] px-2.5 py-1 rounded-full border ${st.cls}`}>{st.label}</span>
+                <div className="ml-auto flex gap-1">
+                  <button
+                    onClick={() => toggleActive(c)}
+                    aria-label={c.isActive ? `Pause ${c.code}` : `Resume ${c.code}`}
+                    title={c.isActive ? "Pause" : "Resume"}
+                    className="p-2 rounded-lg text-white/50 hover:bg-white/5 hover:text-white"
+                  >
+                    {c.isActive ? <PauseIcon size={16} /> : <PlayIcon size={16} />}
+                  </button>
+                  <button
+                    onClick={() => remove(c)}
+                    aria-label={`Delete ${c.code}`}
+                    title="Delete"
+                    className="p-2 rounded-lg text-white/40 hover:bg-red-500/10 hover:text-red-300"
+                  >
+                    <Trash2Icon size={16} />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {form && (
+        <Modal title="New coupon" onClose={() => setForm(null)}>
+          <form onSubmit={submit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block">
+                <span className="text-xs text-white/40">Code</span>
+                <input
+                  required
+                  autoFocus
+                  value={form.code}
+                  onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase().replace(/\s/g, "") })}
+                  placeholder="FIRST10"
+                  maxLength={20}
+                  className={`${inputCls} mt-1.5 uppercase tracking-wider`}
+                />
+              </label>
+              <label className="block">
+                <span className="text-xs text-white/40">Discount (%)</span>
+                <input
+                  required
+                  type="number"
+                  min="1"
+                  max="90"
+                  value={form.discount}
+                  onChange={(e) => setForm({ ...form, discount: e.target.value })}
+                  placeholder="10"
+                  className={`${inputCls} mt-1.5`}
+                />
+              </label>
+            </div>
+            <label className="block">
+              <span className="text-xs text-white/40">Description (shown to customers)</span>
+              <input
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                placeholder="10% off for our first 10 customers"
+                className={`${inputCls} mt-1.5`}
+              />
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block">
+                <span className="text-xs text-white/40">Ends on</span>
+                <input
+                  required
+                  type="date"
+                  min={today()}
+                  value={form.expiresAt}
+                  onChange={(e) => setForm({ ...form, expiresAt: e.target.value })}
+                  className={`${inputCls} mt-1.5 [color-scheme:dark]`}
+                />
+              </label>
+              <label className="block">
+                <span className="text-xs text-white/40">Total uses allowed</span>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={form.maxUses}
+                  onChange={(e) => setForm({ ...form, maxUses: e.target.value })}
+                  placeholder="No limit"
+                  className={`${inputCls} mt-1.5`}
+                />
+              </label>
+            </div>
+            <div className="space-y-3 pt-1">
+              <Toggle
+                checked={form.oncePerCustomer}
+                onChange={(v) => setForm({ ...form, oncePerCustomer: v })}
+                label="Once per customer"
+                hint="Each account can use this code only one time"
+              />
+              <Toggle
+                checked={form.forNewUser}
+                onChange={(v) => setForm({ ...form, forNewUser: v })}
+                label="First order only"
+                hint="Only for customers who haven't ordered before"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <button type="button" onClick={() => setForm(null)} className={btnGhost}>Cancel</button>
+              <button disabled={saving} className={btnPrimary}>{saving ? "Saving…" : "Create coupon"}</button>
+            </div>
+          </form>
+        </Modal>
+      )}
+    </div>
+  );
 }

@@ -1,4 +1,4 @@
-import { PlusIcon, SquarePenIcon } from "lucide-react";
+import { PlusIcon, SquarePenIcon, TagIcon, XIcon } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import AddressModal from "./AddressModal";
 import { useSelector, useDispatch } from "react-redux";
@@ -29,6 +29,41 @@ const OrderSummary = ({ totalPrice, items }) => {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("PAYSTACK");
   const [isLoading, setIsLoading] = useState(false);
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  const discountAmount = coupon
+    ? Math.round(totalPrice * (coupon.discount / 100) * 100) / 100
+    : 0;
+  const finalTotal = Math.round((totalPrice - discountAmount) * 100) / 100;
+
+  const applyCoupon = async (e) => {
+    e?.preventDefault?.();
+    if (!user) return toast.error("Please log in to use a coupon");
+    if (!couponInput.trim()) return toast.error("Enter a coupon code");
+    setCouponLoading(true);
+    try {
+      const token = await getToken();
+      const { data } = await axios.post(
+        "/api/coupon",
+        { code: couponInput },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setCoupon(data.coupon);
+      toast.success(`${data.coupon.code} applied: ${data.coupon.discount}% off`);
+    } catch (error) {
+      setCoupon(null);
+      toast.error(error?.response?.data?.error || "Couldn't apply that coupon");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const removeCoupon = () => {
+    setCoupon(null);
+    setCouponInput("");
+  };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -54,6 +89,7 @@ const OrderSummary = ({ totalPrice, items }) => {
           addressId: selectedAddress.id,
           items,
           paymentMethod,
+          couponCode: coupon?.code || undefined,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -185,11 +221,55 @@ const OrderSummary = ({ totalPrice, items }) => {
         )}
       </div>
 
+      {/* Coupon */}
+      <div className="mb-5">
+        <p className="text-[10px] tracking-[2px] uppercase text-white/25 mb-3">
+          Coupon Code
+        </p>
+        {coupon ? (
+          <div className="flex items-center justify-between gap-2 bg-[#c97b63]/10 border border-[#c97b63]/30 rounded-xl px-3 py-2.5">
+            <span className="flex items-center gap-2 text-[#c97b63] text-sm">
+              <TagIcon size={15} />
+              <b className="tracking-wider">{coupon.code}</b>
+              <span className="text-white/50">−{coupon.discount}%</span>
+            </span>
+            <button
+              type="button"
+              onClick={removeCoupon}
+              aria-label="Remove coupon"
+              className="p-1 text-white/40 hover:text-white"
+            >
+              <XIcon size={15} />
+            </button>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <input
+              value={couponInput}
+              onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+              onKeyDown={(e) => e.key === "Enter" && applyCoupon(e)}
+              placeholder="e.g. FIRST10"
+              aria-label="Coupon code"
+              className="flex-1 min-w-0 bg-white/4 border border-white/10 focus:border-[#c97b63]/50 outline-none text-white/70 placeholder-white/20 px-3 py-2.5 rounded-xl text-sm uppercase tracking-wider transition-colors"
+            />
+            <button
+              type="button"
+              onClick={applyCoupon}
+              disabled={couponLoading}
+              className="px-4 rounded-xl border border-[#c97b63]/40 text-[#c97b63] text-sm hover:bg-[#c97b63]/10 disabled:opacity-40 transition-colors"
+            >
+              {couponLoading ? "..." : "Apply"}
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Price summary */}
       <div className="pb-4 border-b border-white/8">
         <div className="flex justify-between text-sm">
           <div className="flex flex-col gap-1 text-white/30">
             <p>Subtotal:</p>
+            {coupon && <p>Discount ({coupon.code}):</p>}
             <p>Shipping:</p>
           </div>
           <div className="flex flex-col gap-1 text-right text-white/50">
@@ -197,6 +277,12 @@ const OrderSummary = ({ totalPrice, items }) => {
               {currency}
               {totalPrice.toLocaleString()}
             </p>
+            {coupon && (
+              <p className="text-[#c97b63]">
+                −{currency}
+                {discountAmount.toLocaleString()}
+              </p>
+            )}
             <p className="text-[#c97b63]">Free</p>
           </div>
         </div>
@@ -207,7 +293,7 @@ const OrderSummary = ({ totalPrice, items }) => {
         <p className="text-white/50">Total:</p>
         <p className="font-medium text-white">
           {currency}
-          {totalPrice.toLocaleString()}
+          {finalTotal.toLocaleString()}
         </p>
       </div>
 
@@ -220,7 +306,7 @@ const OrderSummary = ({ totalPrice, items }) => {
         {isLoading
           ? "Processing..."
           : paymentMethod === "PAYSTACK"
-            ? `Pay ${currency}${totalPrice.toLocaleString()}`
+            ? `Pay ${currency}${finalTotal.toLocaleString()}`
             : "Place Order"}
       </button>
 

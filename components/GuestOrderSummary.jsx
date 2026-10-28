@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { SignInButton } from "@clerk/nextjs";
 
 const GuestOrderSummary = ({ totalPrice, items }) => {
   const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || "₦";
@@ -183,6 +184,16 @@ const GuestOrderSummary = ({ totalPrice, items }) => {
           {currency}
           {totalPrice.toLocaleString()}
         </p>
+      </div>
+
+      {/* Coupons need an account */}
+      <div className="mb-4 flex items-center justify-between gap-3 bg-[#c97b63]/5 border border-[#c97b63]/20 rounded-xl px-4 py-3 text-xs text-white/50">
+        <span>Have a coupon code? Log in to use it and pay online or on delivery.</span>
+        <SignInButton mode="modal">
+          <button type="button" className="shrink-0 text-[#c97b63] font-medium hover:underline underline-offset-4">
+            Log in
+          </button>
+        </SignInButton>
       </div>
 
       {/* WhatsApp button */}
