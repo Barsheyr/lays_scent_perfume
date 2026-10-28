@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { commitOrderStock } from "@/lib/orders";
 import { notifyNewOrders } from "@/lib/notify";
 import { initializeTransaction, newReference } from "@/lib/paystack";
+import { siteUrl } from "@/lib/siteUrl";
 
 export async function POST(request) {
   try {
@@ -135,8 +136,7 @@ export async function POST(request) {
     // Paystack: send the buyer to Paystack. Stock + cart are handled once
     // payment is confirmed (see lib/orders.js -> confirmPaystackPayment)
     if (isPaystack) {
-      const origin =
-        process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
+      const origin = siteUrl(request);
       try {
         const payment = await initializeTransaction({
           email: address.email,
